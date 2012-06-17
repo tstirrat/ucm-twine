@@ -1,0 +1,18 @@
+﻿<?hda version="11gR1-11.1.1.6.0-idcprod1-111219T111403" jcharset="UTF8" encoding="utf-8"?>
+@Properties LocalData
+ComponentName=TwineLib
+CreateDate=6/10/12 9:12 PM
+blDateFormat=M/d{/yy}{ h:mm[:ss]{ a}}!mAM,PM!tAustralia/NSW
+blFieldTypes=CreateDate date
+@end
+@ResultSet Manifest
+2
+entryType
+location
+component
+TwineLib/TwineLib.hda
+componentExtra
+TwineLib/readme.txt
+componentLib
+TwineLib/lib/
+@end

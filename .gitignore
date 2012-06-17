@@ -1,0 +1,8 @@
+/target
+/lib/*
+TwineLib.zip
+._*
+.classpath
+/.settings
+.project
+manifest.zip

@@ -1,0 +1,36 @@
+﻿<?hda version="11gR1-11.1.1.6.0-idcprod1-111219T111403" jcharset="UTF8" encoding="utf-8"?>
+@Properties LocalData
+ComponentName=TwineLib
+blDateFormat=dd/MM/yyyy {H:mm[:ss] [zzz]}!tAustralia/Sydney
+blFieldTypes=
+classpath=$COMPONENT_DIR/lib/ucm-twine-0.1-SNAPSHOT.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;$COMPONENT_DIR/lib/javassist-3.12.1.GA.jar;$COMPONENT_DIR/lib/log4j-1.2.14.jar;$COMPONENT_DIR/lib/slf4j-api-1.5.10.jar;$COMPONENT_DIR/lib/slf4j-log4j12-1.5.10.jar
+hasPreferenceData=false
+version=1.0-SNAPSHOT $Rev$
+@end
+@ResultSet ResourceDefinition
+4
+type
+filename
+tables
+loadOrder
+@end
+@ResultSet Filters
+4
+type
+location
+parameter
+loadOrder
+@end
+@ResultSet MergeRules
+4
+fromTable
+toTable
+column
+loadOrder
+@end
+@ResultSet ClassAliases
+3
+classname
+location
+loadOrder
+@end
