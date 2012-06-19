@@ -5,7 +5,7 @@ Twine for Oracle WebCenter Content/UCM (ALPHA)
 
 An annotation based dependency injection Java framework for Oracle UCM.
 
-It allows you to write services, Idoc script extensions, filters and (eventually) scheduled events with POJOs and it handles the setup, definition and parameter checking for you.
+It allows you to write services, Idoc script extensions, filters and (eventually) scheduled events with [POJOs](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Objects") and it handles the setup, definition and parameter checking for you.
 
 Furthermore Twine allows you to unit test your code much easier!
 
@@ -82,7 +82,7 @@ An Idoc script function and variable:
     public class ExampleScriptPackage {
 
         @IdocFunction
-        public String strUppercase(Sring value) {
+        public String strUppercase(String value) {
             return value.toUpperCase();
         }
 
