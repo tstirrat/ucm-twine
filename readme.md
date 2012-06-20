@@ -50,17 +50,17 @@ Including in your own component
 
 6. Create your class and annotate a method:
 
-        ```java
-        package org.component.my;
-
-        public class ExampleServicePackage {
-
-            @ServiceMethod(name = "EXAMPLE_SERVICE")
-            public void exampleService(@Binder(name = "param1") String param1) {
-                SystemUtils.trace("system", "param1 was " + param1);
-            }
+    ```java
+    package org.component.my;
+    
+    public class ExampleServicePackage {
+    
+        @ServiceMethod(name = "EXAMPLE_SERVICE")
+        public void exampleService(@Binder(name = "param1") String param1) {
+            SystemUtils.trace("system", "param1 was " + param1);
         }
-        ```
+    }
+    ```
 
 7. Build mycomponent.jar
 
@@ -154,12 +154,13 @@ These will probably be implemented:
 - ... most other members of the Service object
 
 Define your dependencies anywhere in the method signature and they will be injected for you. i.e. you can define a method with injected parameters in between `@Binder` parameters without issue:
-    ```java
-    @ServiceMethod(name = "TEST_SVC")
-    public void serviceA(@Binder(name = "param1") Long param1, UserData u, DataBinder b, @Binder(name = "param2") String param2 ) {
 
-    }
-    ```
+```java
+@ServiceMethod(name = "TEST_SVC")
+public void serviceA(@Binder(name = "param1") Long param1, UserData u, DataBinder b, @Binder(name = "param2") String param2 ) {
+
+}
+```
 
 Specifying binder parameters
 ----------------------------
