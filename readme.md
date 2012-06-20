@@ -51,7 +51,7 @@ Including in your own component
 6. Create your class and annotate a method:
 
     ```java
-    package org.component.my;
+    package org.component.example;
     
     public class ExampleServicePackage {
     
