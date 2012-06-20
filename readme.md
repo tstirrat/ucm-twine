@@ -50,6 +50,7 @@ Including in your own component
 
 6. Create your class and annotate a method:
 
+        ```java
         package org.component.my;
 
         public class ExampleServicePackage {
@@ -59,6 +60,7 @@ Including in your own component
                 SystemUtils.trace("system", "param1 was " + param1);
             }
         }
+        ```
 
 7. Build mycomponent.jar
 
@@ -69,38 +71,44 @@ Examples
 
 A service method:
 
-    public class ExampleServicePackage {
+```java
+public class ExampleServicePackage {
 
-        @ServiceMethod(name = "EXAMPLE_SERVICE")
-        public void exampleService(@Binder(name = "param1") String param1) {
-            SystemUtils.trace("system", "param1 was " + param1);
-        }
+    @ServiceMethod(name = "EXAMPLE_SERVICE")
+    public void exampleService(@Binder(name = "param1") String param1) {
+        SystemUtils.trace("system", "param1 was " + param1);
     }
+}
+```
 
 An Idoc script function and variable:
 
-    public class ExampleScriptPackage {
+```java
+public class ExampleScriptPackage {
 
-        @IdocFunction
-        public String strUppercase(String value) {
-            return value.toUpperCase();
-        }
-
-        @IdocVariable
-        public long TimeInMillis() {
-            return System.currentTimeMillis();
-        }
+    @IdocFunction
+    public String strUppercase(String value) {
+        return value.toUpperCase();
     }
+
+    @IdocVariable
+    public long TimeInMillis() {
+        return System.currentTimeMillis();
+    }
+}
+```
 
 A filter:
 
-    public class ExampleFilterPackage {
+```java
+public class ExampleFilterPackage {
 
-        @Filter(event = "updateExtendedAttributes")
-        public void exampleFilter(@Binder(name = "dID") String dID) {
-            SystemUtils.trace("system", "dID was " + dID);
-        }
+    @Filter(event = "updateExtendedAttributes")
+    public void exampleFilter(@Binder(name = "dID") String dID) {
+        SystemUtils.trace("system", "dID was " + dID);
     }
+}
+```
 
 Properties file syntax
 ----------------------
@@ -172,29 +180,33 @@ You can also use `@Binder` with a `DataResultSet` or `Date` type.
 
 Example:
 
-    public void serviceA(@Binder(name = "SSContributor", required = false) Boolean ssContributor) {
-        if (ssContributor == null) {
-            SystemUtils.trace("system", "SSContributor was not supplied");
-        }
+```java
+public void serviceA(@Binder(name = "SSContributor", required = false) Boolean ssContributor) {
+    if (ssContributor == null) {
+        SystemUtils.trace("system", "SSContributor was not supplied");
     }
+}
 
-    public void rsExists(@Binder(name = "rs", required = false) DataResultSet rs) {
-        if (rs == null) {
-            SystemUtils.trace("system", "rs was not supplied");
-        }
+public void rsExists(@Binder(name = "rs", required = false) DataResultSet rs) {
+    if (rs == null) {
+        SystemUtils.trace("system", "rs was not supplied");
     }
+}
+```
 
 Services
 --------
 Use the @ServiceMethod annotation. Example:
 
-    public class ExampleServicePackage {
+```java
+public class ExampleServicePackage {
 
-        @ServiceMethod(name = "EXAMPLE_SERVICE", template = "TPL_EXAMPLE")
-        public void exampleService(@Binder(name = "param1") String param1) {
-            SystemUtils.trace("system", "param1 was " + param1);
-        }
+    @ServiceMethod(name = "EXAMPLE_SERVICE", template = "TPL_EXAMPLE")
+    public void exampleService(@Binder(name = "param1") String param1) {
+        SystemUtils.trace("system", "param1 was " + param1);
     }
+}
+```
 
 ### Parameters
 **name** The service name
@@ -222,75 +234,87 @@ Idoc scripts and variables are defined in a very similar way, using the `@IdocFu
 
 Parameter and return type coercion is handled for you. i.e returning a Boolean or a boolean will coerce the return value to the correct format (a Long) behind the scenes.
 
-    public class ExampleScriptPackage {
+```java
+public class ExampleScriptPackage {
 
-        @IdocFunction
-        public String strUppercase(String value) {
-            return value.toUpperCase();
-        }
-
-        // in Idoc: <$ strUppercase("value") $> = VALUE
+    @IdocFunction
+    public String strUppercase(String value) {
+        return value.toUpperCase();
     }
+
+    // in Idoc: <$ strUppercase("value") $> = VALUE
+}
+```
 
 IdocVariables do not take any parameters, however you could access all of the injected types or binder values.
 
-    public class ExampleScriptPackage {
+```java
+public class ExampleScriptPackage {
 
-        @IdocVariable
-        public long timeInMillis() {
-            return System.currentTimeMillis();
-        }
-
-        // in Idoc: <$ TimeInMillis $>
+    @IdocVariable
+    public long timeInMillis() {
+        return System.currentTimeMillis();
     }
+
+    // in Idoc: <$ TimeInMillis $>
+}
+```
 
 If you like to keep your method names camel case but want a capitalised variable or function you can specify it with **name**.
 
-    public class ExampleScriptPackage {
+```java
+public class ExampleScriptPackage {
 
-        @IdocVariable(name = "TimeInMillis")
-        public long timeInMillis() {
-            return System.currentTimeMillis();
-        }
-
-        // in Idoc: <$ TimeInMillis $>
+    @IdocVariable(name = "TimeInMillis")
+    public long timeInMillis() {
+        return System.currentTimeMillis();
     }
+
+    // in Idoc: <$ TimeInMillis $>
+}
+```
 
 Method parameters can be mixed with dependency injection types.
 
-    public class ExampleScriptPackage {
+```java
+public class ExampleScriptPackage {
 
-        @IdocFunction
-        public String strHello(ExecutionContext ctx, String value, DataBinder b, UserData u) {
-            return value + " " + u.getName() + "!";
-        }
-
-        // In Idoc: <$ strHello("Hi") $> = Hi tstirrat!
+    @IdocFunction
+    public String strHello(ExecutionContext ctx, String value, DataBinder b, UserData u) {
+        return value + " " + u.getName() + "!";
     }
+
+    // In Idoc: <$ strHello("Hi") $> = Hi tstirrat!
+}
+```
 
 Idoc function parameters do not use a `@Binder` annotation, however you can use the annotation to extract from the binder.
 
-    public class ExampleScriptPackage {
+```java
+public class ExampleScriptPackage {
 
-        @IdocFunction
-        public String strHello(String value, @Binder(name = "dUser") String dUser) {
-            return value + " " + dUser + "!";
-        }
-
-        // In Idoc: <$ strHello("Hi") $> = Hi tstirrat!
+    @IdocFunction
+    public String strHello(String value, @Binder(name = "dUser") String dUser) {
+        return value + " " + dUser + "!";
     }
+
+    // In Idoc: <$ strHello("Hi") $> = Hi tstirrat!
+}
+```
 
 Filters
 -------
 Use the `@Filter` annotation. Example:
 
-    public class ExampleFilterPackage {
+```java
+public class ExampleFilterPackage {
 
-        @Filter(event = "validateStandard", loadOrder = 10)
-        public void exampleFilter(@Binder(name = "dID") Long dID, UserData u) {
-            SystemUtils.trace("system", "The user " + u.getName() + " acted on dID " + dID.toString());
-        }
+    @Filter(event = "validateStandard", loadOrder = 10)
+    public void exampleFilter(@Binder(name = "dID") Long dID, UserData u) {
+        SystemUtils.trace("system", "The user " + u.getName() + " acted on dID " + dID.toString());
     }
+}
+```
 
 ### Annotation options
 
@@ -314,36 +338,39 @@ Scheduled events can sometimes be quite tricky. A lot of boilerplate code is nee
 
 An annotation based scheduler is planned with a cron like syntax something like this:
 
-    public class ExampleScheduledEventPackage {
+```java
+public class ExampleScheduledEventPackage {
 
-        @ScheduledEvent(cronFrequency = "* 2 * * *")
-        public void clearTempFiles(ExecutionContext ctx) {
-            // runs at 2am each day
-        }
+    @ScheduledEvent(cronFrequency = "* 2 * * *")
+    public void clearTempFiles(ExecutionContext ctx) {
+        // runs at 2am each day
     }
+}
+```
 
 ### Custom object injection
 
 Multiple `@Binder` annotions for a single method can get quite messy, so a method of injecting composed objects is planned:
+```java
+public class SignUpForm {
 
-    public class SignUpForm {
+    private String name;
 
-        private String name;
+    public String getName() { return name; }
 
-        public String getName() { return name; }
+    // ...
+}
 
-        // ...
+public class ExampleServicePackage {
+
+    @ServiceMethod(name = "SIGN_UP")
+    public void signUp(SignUpForm form) {
+        SystemUtils.trace("system", "Registrant name is " + form.getName());
     }
+}
 
-    public class ExampleServicePackage {
-
-        @ServiceMethod(name = "SIGN_UP")
-        public void signUp(SignUpForm form) {
-            SystemUtils.trace("system", "Registrant name is " + form.getName());
-        }
-    }
-
-    // executeService("SIGN_UP") with binder name = "Bob" => "Registrant name is Bob"
+// executeService("SIGN_UP") with binder name = "Bob" => "Registrant name is Bob"
+```
 
 License
 =======
