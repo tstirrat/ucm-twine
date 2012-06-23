@@ -38,7 +38,7 @@ public class ExampleServicePackage extends Service {
     public void exampleService() throws DataException {
         String name = m_binder.getLocal("name");
 
-        if (name == null || (name != null && name.equals(""))) {
+        if (name == null) {
             throw new DataException("name is required");
         }
 
