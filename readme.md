@@ -5,12 +5,16 @@ Twine for Oracle WebCenter Content/UCM (ALPHA)
 
 An annotation based Java framework for Oracle UCM.
 
-It allows you to write services, Idoc script extensions, filters and (eventually) scheduled events with [POJOs](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Objects") and it handles the setup, definition and parameter checking for you.
+It allows you to write UCM services, Idoc script extensions and filters using Java [POJO](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Object")s. It handles binder value checking so you never need to write that same glue code again.
 
 Why Twine?
 ----------
 
-### Easier and cleaner
+### All in one place
+
+Twine puts all the information in the Java file where the functionality is, so you don't need to edit the .hda file just to add a new service or change the name of an Idoc function.
+
+### Cleaner and more maintainable code
 
 A service is very easy to write in Twine.
 
@@ -71,14 +75,16 @@ Here we are returning the `DataBinder` object so we can unit test the method.
 public class TestExampleServicePackage {
 
     @Test
-    public void testExampleService_WhenGiven(@Binder(name = "param1") String param1, DataBinder b) {
+    public void testExampleService_ShouldReturnHelloWorld() {
 
         DataBinder binder = new DataBinder();
         binder.putLocal("name", "Tim");
 
-        binder = exampleService("Tim", binder);
+        ExampleServicePackage pkg = new ExampleServicePackage();
 
-        assertEquals("Hello World!", binder.getLocal("message"));
+        binder = pkg.exampleService("Tim", binder);
+
+        assertEquals("Hello Tim!", binder.getLocal("message"));
     }
 }
 ```
