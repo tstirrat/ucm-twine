@@ -6,13 +6,7 @@ import intradoc.server.ServiceData;
 import intradoc.server.ServiceManager;
 import intradoc.shared.FilterImplementor;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
-
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.NotFoundException;
 
 import org.stirrat.twine.annotation.ServiceMethod;
 import org.stirrat.twine.proxy.ServiceProxy;
@@ -79,73 +73,21 @@ public class ServiceInjector extends BaseInjector implements FilterImplementor {
     // action parameters, none by default
     String controlFlags = "";
 
-    // method, pType,pName,pOptional,...
-    String parameters = createActionParameters(method);
+    String methodHashCode = MethodRegistry.addMethod(method);
+
+    if (methodHashCode == null) {
+      throw new DataException("Cannot register method " + method.toString());
+    }
 
     try {
-      serviceData.addAction(Action.CODE_TYPE, "delegateWithParameters", parameters, controlFlags,
+      serviceData.addAction(Action.CODE_TYPE, "delegateWithParameters", methodHashCode, controlFlags,
           "Error executing delegateWithParameters()");
+
     } catch (DataException e) {
       throw new DataException("Cannot add defaut action to service" + serviceName + " - " + e.getMessage());
     }
 
     // inject service
     ServiceManager.putService(serviceName, serviceData);
-  }
-
-  /**
-   * Creates the Action parameter list which contains the parameter definition
-   * and entry point method.
-   * 
-   * @param method
-   *          The UCMService entry point method.
-   * @return A string to put into the action parameter
-   * @throws DataException
-   * @throws ClassNotFoundException
-   * @throws IllegalArgumentException
-   */
-  private static String createActionParameters(Method method) throws DataException {
-
-    String id = ServiceProxy.addMethod(method);
-
-    if (id == null) {
-      throw new DataException("Cannot register method " + method.toString());
-    }
-    // try {
-    // ParameterMarshaller marshaller = new ParameterMarshaller(method);
-    //
-    // return method.getName() + "," + marshaller.toActionString();
-    //
-    // } catch (IllegalArgumentException e) {
-    // throw new DataException(e.getMessage());
-    //
-    // }
-
-    return id;
-  }
-
-  /**
-   * Return a proxied POJO which inherits a super class.
-   * 
-   * @param subclass
-   * @param superclass
-   * @return
-   * @throws NotFoundException
-   * @throws CannotCompileException
-   * @throws IOException
-   */
-  public static Class<?> getProxiedClass(Class<?> subclass, Class<?> superclass) throws CannotCompileException,
-      NotFoundException, IOException {
-    // allready is one.
-    if (superclass.isAssignableFrom(subclass)) {
-      return subclass;
-    }
-
-    ClassPool pool = ClassPool.getDefault();
-    CtClass cc = pool.get(subclass.getName());
-    cc.setSuperclass(pool.get(superclass.getName()));
-    cc.writeFile();
-
-    return cc.toClass();
   }
 }

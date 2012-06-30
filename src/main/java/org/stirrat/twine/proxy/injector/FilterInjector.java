@@ -61,7 +61,7 @@ public class FilterInjector extends BaseInjector implements IClassInjector {
           + "] must have a return type of int or void to be a filter.");
     }
 
-    String methodID = FilterProxy.addMethod(method);
+    String methodID = MethodRegistry.addMethod(method);
 
     if (methodID == null) {
       throw new DataException("Could not generate UUID for method " + method.getName());

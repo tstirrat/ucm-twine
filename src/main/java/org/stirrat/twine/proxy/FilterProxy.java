@@ -8,15 +8,11 @@ import intradoc.data.Workspace;
 import intradoc.shared.FilterImplementor;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import org.stirrat.twine.parameter.ParameterMarshaller;
+import org.stirrat.twine.proxy.injector.MethodRegistry;
 
 public class FilterProxy implements FilterImplementor {
-
-  private static Map<String, Method> methods;
 
   /**
    * Main entry point which will delegate to the filter method with dependency
@@ -30,7 +26,7 @@ public class FilterProxy implements FilterImplementor {
 
       String methodID = (String) ctx.getCachedObject("filterParameter");
 
-      Method m = getMethod(methodID);
+      Method m = MethodRegistry.getMethod(methodID);
 
       ParameterMarshaller marshaller = new ParameterMarshaller(m);
 
@@ -55,34 +51,4 @@ public class FilterProxy implements FilterImplementor {
 
     return CONTINUE;
   }
-
-  /**
-   * Adds a method to the registry and returns the UUID.
-   * 
-   * @return
-   */
-  public static String addMethod(Method m) {
-    if (methods == null) {
-      methods = new HashMap<String, Method>();
-    }
-
-    // TODO: needs duplicate check
-
-    Long uuid = UUID.randomUUID().getMostSignificantBits();
-
-    String uuidString = Long.toHexString(uuid);
-
-    methods.put(uuidString, m);
-
-    return uuidString;
-  }
-
-  public static Method getMethod(String methodID) {
-
-    if (methods == null)
-      return null;
-
-    return methods.get(methodID);
-  }
-
 }
