@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.stirrat</groupId>
 	<artifactId>ucm-twine</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.9.0-SNAPSHOT</version>
 	<name>UCM Twine Library</name>
 	<description>Provides a cleaner interface to UCM services, filters and Idoc Script Extensions</description>
 	<properties>
@@ -22,6 +22,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<configuration>
 					<outputDirectory>lib</outputDirectory>
+					<includeScope>runtime</includeScope>
 					<excludeScope>provided</excludeScope>
 				</configuration>
 				<executions>
@@ -92,24 +93,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.10</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.5.10</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.12.1.GA</version>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -133,7 +119,7 @@
 				<dependency>
 					<groupId>oracle-ucm</groupId>
 					<artifactId>oracle-ucm</artifactId>
-					<version>11.1.1.6.0</version>
+					<version>11.1.1.1.0</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>

@@ -3,7 +3,7 @@
 ComponentName=TwineLib
 blDateFormat=dd/MM/yyyy {H:mm[:ss] [zzz]}!tAustralia/Sydney
 blFieldTypes=
-classpath=$COMPONENT_DIR/lib/ucm-twine-0.1-SNAPSHOT.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;$COMPONENT_DIR/lib/javassist-3.12.1.GA.jar;$COMPONENT_DIR/lib/log4j-1.2.14.jar;$COMPONENT_DIR/lib/slf4j-api-1.5.10.jar;$COMPONENT_DIR/lib/slf4j-log4j12-1.5.10.jar
+classpath=$COMPONENT_DIR/lib/ucm-twine-0.1-SNAPSHOT.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;
 hasPreferenceData=false
 version=1.0-SNAPSHOT $Rev$
 @end
