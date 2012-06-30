@@ -3,112 +3,218 @@
 Twine for Oracle WebCenter Content/UCM (ALPHA)
 =============================================
 
-An annotation based dependency injection Java framework for Oracle UCM.
+An annotation based Java framework for Oracle UCM.
 
-It allows you to write services, Idoc script extensions, filters and (eventually) scheduled events with [POJOs](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Objects") and it handles the setup, definition and parameter checking for you.
+It allows you to write UCM services, Idoc script extensions and filters using Java [POJO](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Object")s. It handles binder value checking so you never need to write that same glue code again.
 
-Furthermore Twine allows you to unit test your code much easier!
+Why Twine?
+----------
 
-Quick Start
-================
+### All in one place
 
-Twine can be used as a library in your own component, or if you plan to have a few Twine based components installed it can be used as a single shared library component.
+Twine puts all the information in the Java file where the functionality is, so you don't need to edit the .hda file just to add a new service or change the name of an Idoc function.
 
-Use as an addition to the TwineLib component
---------------------------------------------
+### Cleaner and more maintainable code
 
-1. Install the TwineLib component and enable it.
-1. Follow the next guide from step 4.
-
-Including in your own component
--------------------------------
-
-1. Get/build the Twine jar (preferably with Maven)
-2. Create a UCM component: MyComponent
-3. Include twine in your MyComponent.hda classpath:
-
-        classpath=$COMPONENT_DIR/lib/mycomponent.jar;$COMPONENT_DIR/lib/ucm-twine-0.1-SNAPSHOT.jar;
-
-4. Include a .properties file in your jar to define your services and script extension classes. If you use maven and place the file in `src/main/resources` it will be at the root of your jar.
-
-        # <jar root>/mycomponent.properties
-        ucm.service.ExampleServicePackage=org.component.example.ExampleServicePackage
-
-5. Add Twine's Bootstrapper to the **Filters** resultset of your MyComponent.hda file, using the .properties file as the filter's parameter. If the .properties file is not at the root of your jar you may need to add relative path information here.
-
-        @ResultSet Filters
-        4
-        type
-        location
-        parameter
-        loadOrder
-        extraAfterConfigInit
-        org.stirrat.twine.Bootstrapper
-        mycomponent.properties
-        1000
-        @end
-
-6. Create your class and annotate a method:
-
-        ```java
-        package org.component.my;
-
-        public class ExampleServicePackage {
-
-            @ServiceMethod(name = "EXAMPLE_SERVICE")
-            public void exampleService(@Binder(name = "param1") String param1) {
-                SystemUtils.trace("system", "param1 was " + param1);
-            }
-        }
-        ```
-
-7. Build mycomponent.jar
-
-From here you can edit mycomponent.properties each time you add a new class. However, if you are adding a new method to an existing class, there is no more setup needed.
-
-Examples
---------
-
-A service method:
+A service is very easy to write in Twine.
 
 ```java
 public class ExampleServicePackage {
 
     @ServiceMethod(name = "EXAMPLE_SERVICE")
-    public void exampleService(@Binder(name = "param1") String param1) {
-        SystemUtils.trace("system", "param1 was " + param1);
+    public void exampleService(@Binder(name = "name") String name) {
+        SystemUtils.trace("system", "Hello " + name + "!");
     }
 }
 ```
 
-An Idoc script function and variable:
+We have declared a service called `EXAMPLE_SERVICE`, which requires a single string parameter called `name`.
+
+If you were to do this the old fashioned way (not including the .hda file work), you'd end up writing:
+
+```java
+public class ExampleServicePackage extends Service {
+
+    public void exampleService() throws DataException {
+        String name = m_binder.getLocal("name");
+
+        if (name == null) {
+            throw new DataException("name is required");
+        }
+
+        SystemUtils.trace("system", "Hello " + name + "!");
+    }
+}
+```
+
+Now suppose you wanted several parameters and each parameter to be optional; to have a default when not supplied; or to be a parsed into a boolean or Date object?
+
+If you end up parameter checking 4 or 5 values, you can end up with more "glue" code than actual functionality.
+
+Twine handles the glue for you, so your methods are cleaner, more descriptive and **easier to test**.
+
+### Code is testable
+
+Services, filters and Idoc scripts in their original form aren't easy to test. But a Twine POJO makes it simple.
+
+```java
+public class ExampleServicePackage {
+
+    @ServiceMethod(name = "EXAMPLE_SERVICE")
+    public DataBinder exampleService(@Binder(name = "name") String name, DataBinder outputBinder) {
+        outputBinder.putLocal("message", "Hello " + name + "!");
+
+        return outputBinder;
+    }
+}
+```
+
+Here we are returning the `DataBinder` object so we can unit test the method.
+
+```java
+public class TestExampleServicePackage {
+
+    @Test
+    public void testExampleService_ShouldReturnHelloWorld() {
+
+        DataBinder binder = new DataBinder();
+        binder.putLocal("name", "Tim");
+
+        ExampleServicePackage pkg = new ExampleServicePackage();
+
+        binder = pkg.exampleService("Tim", binder);
+
+        assertEquals("Hello Tim!", binder.getLocal("message"));
+    }
+}
+```
+
+### Idoc functions are easy to write
+
+Idoc functions can be so much of a pain to write that most developers will find any other way to implement the functionality before resorting to a custom Idoc function. Twine makes Idoc functions so simple that it's about as complicated as writing the function in Java. In turn you'll write better Idoc script functions, and your template code will be a lot cleaner.
 
 ```java
 public class ExampleScriptPackage {
 
     @IdocFunction
-    public String strUppercase(String value) {
-        return value.toUpperCase();
+    public int strLength(String str) {
+        return str.length();
     }
 
-    @IdocVariable
-    public long TimeInMillis() {
-        return System.currentTimeMillis();
-    }
+    // <$ strLength("bob") $> = 3
 }
 ```
 
-A filter:
+Compare this to the effort required to create an Idoc function the old way (ommitted due to size) and you can see how much more productive Twine will make UCM customisations.
+
+Idoc script functions can also include injected objects and `@Binder` values which can be defined in any order and will not affect the basic function parameters:
+
+```java
+public class ExampleScriptPackage {
+
+    @IdocFunction
+    public String specialFunction(String str, UserData u, Long l) {
+        return "String was: " + str + ", long was " + l.toString();
+    }
+
+    // <$ specialFunction("bob", 3) $> = String was bob, long was 3
+
+    @IdocFunction
+    public String specialFunction(String str, UserData u, @Binder(name = "l") Long l) {
+        return "String was: " + str + ", binder value was " + l.toString();
+    }
+
+    // <$ l = 4 $>
+    // <$ specialFunction("bob") $> = String was bob, binder value was 4
+}
+```
+
+Twine handles type conversion of the parameters and return types automatically so you can define the function as you see fit. _To prevent too much data conversion you should define your parameters as Double, Long or Date, because those are the types UCM uses internally._
+
+### Multiple filters in one class
+
+Because Twine uses method annotations for Idoc scripts and services, we decided to keep to this convention by placing the filter annotations on the method instead of the class. A nice side effect of this is that you can add several filter annotations to a single class. This allows you to group similar filters together.
 
 ```java
 public class ExampleFilterPackage {
 
+    @Filter(event = "validateStandard")
+    public int beforeCheckin(@Binder(name = "dDocTitle") String dDocTitle, @Binder(name = "dSecurityGroup"), UserData u) {
+        // do something
+        return FilterImplementor.CONTINUE;
+    }
+
     @Filter(event = "updateExtendedAttributes")
-    public void exampleFilter(@Binder(name = "dID") String dID) {
-        SystemUtils.trace("system", "dID was " + dID);
+    public int afterCheckin(@Binder(name = "dDocName") String dDocName) {
+        SystemUtils.trace("twine", "Checked in " + dDocName);
+
+        return FilterImplementor.CONTINUE;
     }
 }
 ```
+
+Quick Start
+================
+
+Twine can be used as a library in your own component or - if you plan to have a few Twine based components installed - it can be used as a single shared component.
+
+Use as a shared TwineLib component
+----------------------------------
+
+1. Install the TwineLib component and enable it.
+1. Follow the next guide from step 4.
+
+Including the Twine jar in your own component
+---------------------------------------------
+
+1. Build the Twine jar (preferably with Maven) (download coming soon)
+2. Create a UCM component: MyComponent
+3. Include twine in your MyComponent.hda classpath:
+
+    ```
+    classpath=$COMPONENT_DIR/lib/mycomponent.jar;$COMPONENT_DIR/lib/ucm-twine-0.1-SNAPSHOT.jar;
+    ```
+
+4. Include a .properties file in your jar to define your services and script extension classes. If you use maven and place the file in `src/main/resources` it will be at the root of your jar.
+
+    ```
+    # <jar root>/mycomponent.properties
+    ucm.service.ExampleServicePackage=org.component.example.ExampleServicePackage
+    ```
+
+5. Add Twine's Bootstrapper to the **Filters** resultset of your MyComponent.hda file, using the .properties file as the filter's parameter. If the .properties file is not at the root of your jar you may need to add relative path information here.
+
+    ```
+    @ResultSet Filters
+    4
+    type
+    location
+    parameter
+    loadOrder
+    extraAfterConfigInit
+    org.stirrat.twine.Bootstrapper
+    mycomponent.properties
+    1000
+    @end
+    ```
+
+6. Create your class and annotate a method:
+
+    ```java
+    package org.component.example;
+
+    public class ExampleServicePackage {
+
+        @ServiceMethod(name = "EXAMPLE_SERVICE")
+        public void exampleService(@Binder(name = "param1") String param1) {
+            SystemUtils.trace("system", "param1 was " + param1);
+        }
+    }
+    ```
+
+7. Build mycomponent.jar
+
+From here you can edit your .properties file each time you add a new class. However, if you are adding a new method to an existing class, there is no more setup needed.
 
 Properties file syntax
 ----------------------
@@ -125,10 +231,10 @@ Make sure to define each key before the = sign with a different name so that eac
 
 That's all you need! Now you can begin writing service, filter or Idoc script definitions into your classes.
 
-Documentation
+Reference
 =============
 
-Dependency injection basics
+Dependency injection types
 ---------------------------
 
 Declare the object you need as a parameter to your method and Twine will do its best to provide you with the object.
@@ -155,23 +261,21 @@ These will probably be implemented:
 
 Define your dependencies anywhere in the method signature and they will be injected for you. i.e. you can define a method with injected parameters in between `@Binder` parameters without issue:
 
-    @ServiceMethod(name = "TEST_SVC")
-    public void serviceA(@Binder(name = "param1") Long param1, UserData u, DataBinder b, @Binder(name = "param2") String param2 ) {
+```java
+@ServiceMethod(name = "TEST_SVC")
+public void serviceA(@Binder(name = "param1") Long param1, UserData u, DataBinder b, @Binder(name = "param2") String param2 ) {
 
-    }
+}
+```
 
-Specifying binder parameters
+@Binder
 ----------------------------
-
-The `@Binder` annotation provides binder parameter checking for filters, services and Idoc scripts.
-
-### Annotation options
 
 **name** The parameter name in the binder or the result set name.
 
 **required** Whether the parameter is required. Default: true.
 
-**missing** If required is set to false, this is the value that will be given. (not implemented yet)
+**missing** If required is set to false, this is the value that will be given if the parameter is not supplied. (not implemented yet)
 
 If the required parameter is set to `true`, a `DataException` will be thrown if the binder value is null or an empty string. If the required parameter is left as false - its default state - the parameter will allow an empty or null value.
 
@@ -194,21 +298,9 @@ public void rsExists(@Binder(name = "rs", required = false) DataResultSet rs) {
 }
 ```
 
-Services
+@ServiceMethod
 --------
-Use the @ServiceMethod annotation. Example:
 
-```java
-public class ExampleServicePackage {
-
-    @ServiceMethod(name = "EXAMPLE_SERVICE", template = "TPL_EXAMPLE")
-    public void exampleService(@Binder(name = "param1") String param1) {
-        SystemUtils.trace("system", "param1 was " + param1);
-    }
-}
-```
-
-### Parameters
 **name** The service name
 
 **template** The template to render. Unfortunately, templates are still defined in the old ComponentWizard way, for now.
@@ -223,12 +315,20 @@ Defaults to `ACCESS_READ | ACCESS_SCRIPTABLE`. **(also likely to change)**
 
 **subjects** The subjects to notify
 
-Idoc Script Functions and Variables
+Example:
+
+```java
+public class ExampleServicePackage {
+
+    @ServiceMethod(name = "EXAMPLE_SERVICE", template = "TPL_EXAMPLE")
+    public void exampleService(@Binder(name = "param1") String param1) {
+        SystemUtils.trace("system", "param1 was " + param1);
+    }
+}
+```
+
+@IdocFunction and @IdocVariable
 -----------------------------------
-
-Idoc scripts and variables are defined in a very similar way, using the `@IdocFunction` or `@IdocVariable` annotations.
-
-### Annotation options
 
 **name** Specify a name if it differs from the Java method name. e.g. requiring strange capitalisation.
 
@@ -302,9 +402,18 @@ public class ExampleScriptPackage {
 }
 ```
 
-Filters
+@Filter
 -------
-Use the `@Filter` annotation. Example:
+
+**loadOrder** The load order. Default: 100.
+
+**event** The filter name e.g. validateStandard. 
+
+**Note:** At the time of writing, the filter injector runs at _extraAfterConfigInit_. Only events that execute *after* this event will work.
+
+**parameter** The parameter to pass to the filter **(unimplemented)**.
+
+Example:
 
 ```java
 public class ExampleFilterPackage {
@@ -316,21 +425,8 @@ public class ExampleFilterPackage {
 }
 ```
 
-### Annotation options
-
-**loadOrder** The load order. Default: 100.
-
-**event** The filter name e.g. validateStandard. 
-
-**Note:** At the time of writing, the filter injector runs at _extraAfterConfigInit_. Only events that execute *after* this event will work.
-
-**parameter** The parameter to pass to the filter **(unimplemented)**.
-
-
-The future
-==========
-
-Some planned enhancements.
+Roadmap
+=======
 
 ### Scheduled Events
 
@@ -351,6 +447,7 @@ public class ExampleScheduledEventPackage {
 ### Custom object injection
 
 Multiple `@Binder` annotions for a single method can get quite messy, so a method of injecting composed objects is planned:
+
 ```java
 public class SignUpForm {
 
