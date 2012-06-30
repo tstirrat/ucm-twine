@@ -3,7 +3,7 @@
 ComponentName=TwineLib
 blDateFormat=dd/MM/yyyy {H:mm[:ss] [zzz]}!tAustralia/Sydney
 blFieldTypes=
-classpath=$COMPONENT_DIR/lib/ucm-twine-0.9.0-SNAPSHOT.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;
+classpath=$COMPONENT_DIR/lib/ucm-twine-0.9.0.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;
 componentTags=twine
 featureExtensions=Twine:0.9.0
 hasPreferenceData=0

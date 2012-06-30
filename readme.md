@@ -167,12 +167,12 @@ Use as a shared TwineLib component
 Including the Twine jar in your own component
 ---------------------------------------------
 
-1. Build the Twine jar (preferably with Maven) (download coming soon)
+1. Grab the Twine jar from the downloads page.
 2. Create a UCM component: MyComponent
 3. Include twine in your MyComponent.hda classpath:
 
     ```
-    classpath=$COMPONENT_DIR/lib/mycomponent.jar;$COMPONENT_DIR/lib/ucm-twine-0.1-SNAPSHOT.jar;
+    classpath=$COMPONENT_DIR/lib/mycomponent.jar;$COMPONENT_DIR/lib/ucm-twine-0.9.0.jar;
     ```
 
 4. Include a .properties file in your jar to define your services and script extension classes. If you use maven and place the file in `src/main/resources` it will be at the root of your jar.
@@ -192,7 +192,7 @@ Including the Twine jar in your own component
     parameter
     loadOrder
     extraAfterConfigInit
-    org.stirrat.twine.Bootstrapper
+    org.ucmtwine.Bootstrapper
     mycomponent.properties
     1000
     @end
