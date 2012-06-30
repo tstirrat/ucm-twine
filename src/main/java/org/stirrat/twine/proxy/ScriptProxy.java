@@ -30,6 +30,8 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
 
   private List<String> variableMethodNames;
 
+  private Class<?> m_class;
+
   public static final int RETURN_VOID = -1;
   public static final int RETURN_STRING = 0;
   public static final int RETURN_BOOLEAN = 1;
@@ -38,7 +40,8 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
 
   public static final int NONE = -1;
 
-  public ScriptProxy() {
+  public ScriptProxy(Class<?> klass) {
+    m_class = klass;
     generateDefinitions();
   }
 
@@ -49,6 +52,9 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
    * "Return Type". Return type has the following possible values: 0 generic
    * object (such as strings) 1 boolean 2 integer 3 double. The value "-1" means
    * the value is unspecified.
+   * 
+   * @param klass
+   *          The annotated class
    */
   private void generateDefinitions() {
     functionParameterTypes = new ArrayList<Class<?>[]>();
@@ -63,7 +69,7 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
     List<String> variableNames = new ArrayList<String>();
     List<Integer> variableReturnTypes = new ArrayList<Integer>();
 
-    for (Method m : this.getClass().getDeclaredMethods()) {
+    for (Method m : m_class.getDeclaredMethods()) {
       IdocFunction functionInfo = m.getAnnotation(IdocFunction.class);
 
       if (functionInfo != null) {
@@ -92,8 +98,8 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
   }
 
   /**
-   * Build a static int[m][2] array of variable info where the int array is {
-   * variable_index, return_type }.
+   * Build a static int[m][2] array of variable info where the int array is
+   * <code>{ variable_index, return_type }</code>.
    * 
    * @param functionParams
    */
@@ -269,17 +275,24 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
   public Object runFunctionMethod(int functionIndex, Object[] args, ExecutionContext ctx) throws SecurityException,
       NoSuchMethodException, IllegalArgumentException, ServiceException, IllegalAccessException,
       InvocationTargetException {
-    Method method = getClass().getMethod(functionMethodNames.get(functionIndex),
-        functionParameterTypes.get(functionIndex));
+    Method method = m_class
+        .getMethod(functionMethodNames.get(functionIndex), functionParameterTypes.get(functionIndex));
 
     Object params[] = getInjectedValueArray(method, args, ctx);
 
-    Object result = method.invoke(this, params);
-    
+    Object result;
+    try {
+      result = method.invoke(m_class.newInstance(), params);
+
+    } catch (InstantiationException e) {
+      // TODO catch and re-throw ewwwww
+      throw new ServiceException("Cannot delegate instantiate script context: " + e.getMessage());
+    }
+
     if (result == null) {
       result = "";
     }
-    
+
     if (boolean.class.isInstance(result) || Boolean.class.isInstance(result)) {
       return ScriptExtensionUtils.computeReturnObject(1, ((Boolean) result).booleanValue(), 0, 0.0, null);
 
@@ -358,15 +371,22 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
   public Object runVariableMethod(int variableIndex, ExecutionContext ctx) throws SecurityException,
       NoSuchMethodException, IllegalArgumentException, ServiceException, IllegalAccessException,
       InvocationTargetException {
-    Method method = getClass().getMethod(variableMethodNames.get(variableIndex),
-        variableParameterTypes.get(variableIndex));
+    Method method = m_class
+        .getMethod(variableMethodNames.get(variableIndex), variableParameterTypes.get(variableIndex));
 
     // faked argument array for injection.
     Object args[] = { 0 };
 
     Object params[] = getInjectedValueArray(method, args, ctx);
 
-    Object result = method.invoke(this, params);
+    Object result;
+    try {
+      result = method.invoke(m_class.newInstance(), params);
+
+    } catch (InstantiationException e) {
+      // TODO catch and re-throw ewwwww
+      throw new ServiceException("Cannot delegate instantiate script context: " + e.getMessage());
+    }
 
     if (result.getClass() == boolean.class || result.getClass() == Boolean.class) {
       return ScriptExtensionUtils.computeReturnObject(1, ((Boolean) result).booleanValue(), 0, 0.0, null);

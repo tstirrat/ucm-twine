@@ -7,6 +7,8 @@ import intradoc.common.ServiceException;
 import intradoc.data.DataException;
 import intradoc.shared.FilterImplementor;
 
+import org.stirrat.twine.proxy.ScriptProxy;
+
 public class IdocScriptInjector extends BaseInjector implements IClassInjector, FilterImplementor {
 
   /**
@@ -23,22 +25,14 @@ public class IdocScriptInjector extends BaseInjector implements IClassInjector, 
   @Override
   public void inject(Class<?> klass) throws DataException, ServiceException {
 
+    // loads function def table from annotated class
+    ScriptExtensions extensions = new ScriptProxy(klass);
+
+    // load func def table and set parent to the default script context
     ScriptContext defaultScriptContext = (ScriptContext) AppObjectRepository.getObject("DefaultScriptContext");
+    extensions.load(defaultScriptContext);
 
-    ScriptExtensions extensions;
-    try {
-      extensions = (ScriptExtensions) klass.newInstance();
-
-      extensions.load(defaultScriptContext);
-
-      defaultScriptContext.registerExtension(extensions);
-
-    } catch (InstantiationException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    // register these extensions
+    defaultScriptContext.registerExtension(extensions);
   }
 }
