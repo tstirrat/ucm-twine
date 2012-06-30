@@ -1,4 +1,4 @@
-package org.stirrat.ecm.annotations.test.idocscript;
+package org.stirrat.twine.test.idocscript;
 
 import static org.junit.Assert.assertArrayEquals;
 import intradoc.common.GrammarElement;
@@ -10,9 +10,9 @@ import org.stirrat.twine.proxy.ScriptProxy;
 
 public class TestScriptProxy {
 
-  //@Test
+  // @Test
   public void testGenerateFunctionDefinitions() {
-    ScriptExtensions scriptPackage = new TestScriptPackage();
+    ScriptExtensions scriptPackage = new ScriptProxy(TestScriptPackage.class);
 
     assertArrayEquals(new int[][] {
         { 0, 1, GrammarElement.INTEGER_VAL, Parameter.GRAMMAR_ELEMENT_UNSPECIFIED, ScriptProxy.RETURN_INTEGER }, // factorial(int)
@@ -25,7 +25,7 @@ public class TestScriptProxy {
 
   @Test
   public void testGenerateVariableDefinitions() {
-    ScriptExtensions scriptPackage = new TestScriptPackage();
+    ScriptExtensions scriptPackage = new ScriptProxy(TestScriptPackage.class);
 
     assertArrayEquals(new int[][] { { 0, ScriptProxy.RETURN_STRING }, // UppercaseUserName
                                                                       // (String)

@@ -1,4 +1,4 @@
-package org.stirrat.ecm.annotations.test.parameter;
+package org.stirrat.twine.test.parameter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

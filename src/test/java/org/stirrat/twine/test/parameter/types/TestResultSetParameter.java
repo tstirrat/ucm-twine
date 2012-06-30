@@ -1,4 +1,4 @@
-package org.stirrat.ecm.annotations.test.parameter.types;
+package org.stirrat.twine.test.parameter.types;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;

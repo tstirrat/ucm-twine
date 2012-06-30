@@ -1,8 +1,7 @@
-package org.stirrat.ecm.annotations.test.idocscript;
+package org.stirrat.twine.test.idocscript;
 
 import intradoc.common.ExecutionContext;
 import intradoc.common.LocaleUtils;
-import intradoc.common.ScriptExtensions;
 import intradoc.common.ServiceException;
 import intradoc.data.DataBinder;
 import intradoc.server.PageMerger;
@@ -15,14 +14,13 @@ import java.util.TimeZone;
 
 import org.stirrat.twine.annotation.IdocFunction;
 import org.stirrat.twine.annotation.IdocVariable;
-import org.stirrat.twine.proxy.ScriptProxy;
 
 /**
  * Example script package replicating the HowToComponents script extensions.
  * 
  * @author tim
  */
-public class TestScriptPackage extends ScriptProxy implements ScriptExtensions {
+public class TestScriptPackage {
 
   @IdocVariable(name = "UppercaseUserName")
   public String uppercaseUserName(ExecutionContext context) throws ServiceException {
