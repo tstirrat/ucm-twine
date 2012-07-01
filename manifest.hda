@@ -2,7 +2,7 @@
 @Properties LocalData
 ComponentName=TwineLib
 CreateDate=6/10/12 9:12 PM
-blDateFormat=M/d{/yy}{ h:mm[:ss]{ a}}!mAM,PM!tAustralia/NSW
+blDateFormat=M/d{/yy}{ h:mm[:ss]{ a}}!mAM,PM!tAustralia/Sydney
 blFieldTypes=CreateDate date
 @end
 @ResultSet Manifest
