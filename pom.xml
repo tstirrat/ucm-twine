@@ -3,8 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.ucmtwine</groupId>
 	<artifactId>ucm-twine</artifactId>
-	<version>0.9.0</version>
+	<version>0.9.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 	<name>UCM Twine Library</name>
 	<description>Dependency injection framework for Oracle WebCenter Content (UCM)</description>
 	<url>https://github.com/tstirrat/ucm-twine</url>
@@ -25,9 +30,6 @@
 			<email>tim.stirrat@gmail.com</email>
 		</developer>
 	</developers>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 	<build>
 		<plugins>
 			<plugin>
