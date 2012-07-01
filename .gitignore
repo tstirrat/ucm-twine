@@ -6,3 +6,5 @@ TwineLib.zip
 /.settings
 .project
 manifest.zip
+release.properties
+pom.xml.releaseBackup
