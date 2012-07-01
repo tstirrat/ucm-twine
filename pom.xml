@@ -20,8 +20,8 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:git:ssh://github.com/tstirrat/ucm-twine.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/tstirrat/ucm-twine.git</developerConnection>
+		<connection>scm:git:git://github.com/tstirrat/ucm-twine.git</connection>
+		<developerConnection>scm:git:git://github.com/tstirrat/ucm-twine.git</developerConnection>
 		<url>https://github.com/tstirrat/ucm-twine</url>
 	</scm>
 	<developers>
