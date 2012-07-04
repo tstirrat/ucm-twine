@@ -1,6 +1,4 @@
-(This README is a work in progress)
-
-Twine for Oracle WebCenter Content/UCM (ALPHA)
+Twine for Oracle WebCenter Content/UCM (Beta)
 =============================================
 
 An annotation based Java framework for Oracle UCM.
@@ -167,7 +165,16 @@ Use as a shared TwineLib component
 Including the Twine jar in your own component
 ---------------------------------------------
 
-1. Grab the Twine jar from the downloads page.
+1. Grab the Twine jar from the downloads page or include it as a maven dependency:
+
+    ```xml
+    <dependency>
+        <groupId>org.ucmtwine</groupId>
+        <artifactId>ucm-twine</artifactId>
+        <version>0.9.0</version>
+    </dependency>
+    ```
+
 2. Create a UCM component: MyComponent
 3. Include twine in your MyComponent.hda classpath:
 
