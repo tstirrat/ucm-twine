@@ -437,7 +437,7 @@ Roadmap
 
 ### Scheduled Events
 
-Scheduled events can sometimes be quite tricky. A lot of boilerplate code is needed to make sure events fire  only onece on clusters, at the right time and with the right frequency.
+Scheduled events can sometimes be quite tricky. A lot of boilerplate code is needed to make sure events fire only once on clusters, at the right time and with the right frequency.
 
 An annotation based scheduler is planned with a cron like syntax something like this:
 
@@ -486,3 +486,17 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### Some parts of this software are licensed under separate licenses
+
+#### src/main/java/net/balusc/util/ObjectConverter.java
+
+see: http://balusc.blogspot.com/2007/08/generic-object-converter.html
+
+Copyright (C) 2007 BalusC
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ 
+This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details. 
+You should have received a copy of the GNU Lesser General Public License along with this library.
+If not, see <http://www.gnu.org/licenses/>.
