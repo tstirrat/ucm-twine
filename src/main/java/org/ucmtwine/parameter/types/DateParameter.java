@@ -41,7 +41,7 @@ public class DateParameter extends Parameter {
 
     } catch (Exception e) {
       if (dateString != null) {
-        throw new IllegalArgumentException("Parameter " + name + " must be parseable as a date");
+        throw new IllegalArgumentException("Parameter '" + name + "' must be parseable as a date");
       }
     }
 

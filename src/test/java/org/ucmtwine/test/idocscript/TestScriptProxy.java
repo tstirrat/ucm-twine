@@ -10,17 +10,17 @@ import org.ucmtwine.proxy.ScriptProxy;
 
 public class TestScriptProxy {
 
-  // @Test
+  @Test
   public void testGenerateFunctionDefinitions() {
     ScriptExtensions scriptPackage = new ScriptProxy(TestScriptPackage.class);
 
-    assertArrayEquals(new int[][] {
-        { 0, 1, GrammarElement.INTEGER_VAL, Parameter.GRAMMAR_ELEMENT_UNSPECIFIED, ScriptProxy.RETURN_INTEGER }, // factorial(int)
-        { 1, 2, GrammarElement.STRING_VAL, GrammarElement.STRING_VAL, ScriptProxy.RETURN_STRING }, // strMin(String,String)
-        { 2, 1, GrammarElement.STRING_VAL, Parameter.GRAMMAR_ELEMENT_UNSPECIFIED, ScriptProxy.RETURN_VOID }, // log(String)
-    }, scriptPackage.getFunctionDefinitionTable());
+    assertArrayEquals(new String[] { "log", "factorial", "strMin" }, scriptPackage.getFunctionTable());
 
-    assertArrayEquals(new String[] { "factorial", "strMin", "log" }, scriptPackage.getFunctionTable());
+    assertArrayEquals(new int[][] {
+        { 0, 1, GrammarElement.STRING_VAL, Parameter.GRAMMAR_ELEMENT_UNSPECIFIED, ScriptProxy.RETURN_VOID }, // log(String)
+        { 1, 1, GrammarElement.INTEGER_VAL, Parameter.GRAMMAR_ELEMENT_UNSPECIFIED, ScriptProxy.RETURN_INTEGER }, // factorial(int)
+        { 2, 2, GrammarElement.STRING_VAL, GrammarElement.STRING_VAL, ScriptProxy.RETURN_STRING }, // strMin(String,String)
+    }, scriptPackage.getFunctionDefinitionTable());
   }
 
   @Test

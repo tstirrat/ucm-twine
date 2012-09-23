@@ -9,7 +9,6 @@ import java.util.Date;
 
 import net.balusc.util.ObjectConverter;
 
-import org.apache.commons.lang.ClassUtils;
 import org.ucmtwine.parameter.types.BooleanParameter;
 import org.ucmtwine.parameter.types.DateParameter;
 import org.ucmtwine.parameter.types.DoubleParameter;
@@ -58,30 +57,16 @@ public abstract class Parameter implements IParameter {
   }
 
   /**
-   * Factory method to create the concrete variable type.
-   * 
+   * Shortcut to make a named String parameter.
    * @param name
-   *          The name in the binder of the variable.
    * @return
    */
   public static Parameter create(String name) {
     return create(name, String.class, true);
   }
 
-  public static Parameter create(String typeString, String name, String requiredString) throws ClassNotFoundException,
-      IllegalArgumentException {
-
-    Class<?> type = getTypeFromString(typeString);
-
-    return create(name, type, parseRequiredString(requiredString));
-  }
-
-  public static Class<?> getTypeFromString(String typeString) throws ClassNotFoundException {
-    return ClassUtils.getClass(typeString);
-  }
-
   /**
-   * Create a standard, required, parameter.
+   * Create an un-named, required, parameter.
    * 
    * @param type
    * @return
@@ -90,6 +75,13 @@ public abstract class Parameter implements IParameter {
     return create("", type, true);
   }
 
+  /**
+   * Factory method to create the concrete variable type.
+   * 
+   * @param name
+   *          The name in the binder of the variable.
+   * @return
+   */
   public static Parameter create(String name, Class<?> type, boolean required) throws IllegalArgumentException {
 
     if (InjectedParameter.isValidType(type)) {
@@ -134,37 +126,6 @@ public abstract class Parameter implements IParameter {
     p.setRequired(required);
 
     return p;
-  }
-
-  /**
-   * Determines the classname to assign given a string "type" representation.
-   * 
-   * @param typeString
-   * @return
-   */
-  public static Class<?> parseTypeString(String typeString) {
-
-    if (typeString.equalsIgnoreCase("string")) {
-      return String.class;
-
-    } else if (typeString.equalsIgnoreCase("int") || typeString.equalsIgnoreCase("Integer")) {
-      return Integer.class;
-
-    } else if (typeString.equalsIgnoreCase("Float") || typeString.equalsIgnoreCase("Double")) {
-      return Float.class;
-
-    } else if (typeString.equalsIgnoreCase("Date")) {
-      return Date.class;
-
-    } else if (typeString.equalsIgnoreCase("resultset") || typeString.equalsIgnoreCase("DataResultSet")) {
-      return DataResultSet.class;
-
-    } else if (typeString.equalsIgnoreCase("bool") || typeString.equalsIgnoreCase("boolean")) {
-      return Boolean.class;
-
-    } else {
-      throw new IllegalArgumentException("Parameter type " + typeString + " is not known");
-    }
   }
 
   /**

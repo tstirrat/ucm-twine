@@ -10,9 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-import org.apache.commons.lang.StringUtils;
 import org.ucmtwine.annotation.Binder;
 import org.ucmtwine.parameter.types.InjectedParameter;
 
@@ -36,10 +34,6 @@ public class ParameterMarshaller {
     this.parameters = new ArrayList<IParameter>();
   }
 
-  public ParameterMarshaller(Vector<String> params) throws ClassNotFoundException {
-    this.parameters = createList(params);
-  }
-
   public ParameterMarshaller(Method method) throws IllegalArgumentException {
     this.parameters = createList(method);
   }
@@ -53,38 +47,11 @@ public class ParameterMarshaller {
   }
 
   /**
-   * Creates the list of BinderVariables
-   * 
-   * @param binder
-   *          The binder to extract variables out of
-   * @param params
-   *          The parameter string given to ServiceProxy
-   * @return The list of BinderVariables
-   * @throws ClassNotFoundException
-   */
-  private static List<IParameter> createList(Vector<String> params) throws ClassNotFoundException {
-
-    List<IParameter> parameters = new ArrayList<IParameter>();
-
-    for (int i = 0; i < params.size();) {
-      String klass = params.get(i++);
-      String name = params.get(i++);
-      String required = params.get(i++);
-
-      parameters.add(Parameter.create(klass, name, required));
-    }
-
-    return parameters;
-  }
-
-  /**
    * Creates the list of BinderVariables given a method obtained through
    * reflection.
    * 
-   * @param binder
-   *          The binder to extract variables out of
-   * @param params
-   *          The parameter string given to ServiceProxy
+   * @param method
+   *          The method
    * @return The list of BinderVariables
    */
   private static List<IParameter> createList(Method method) {
@@ -297,21 +264,5 @@ public class ParameterMarshaller {
     }
 
     return paramArray;
-  }
-
-  /**
-   * Returns the action parameter definition string.
-   * 
-   * @return
-   */
-  public String toActionString() {
-
-    String paramArray[] = new String[this.parameters.size()];
-
-    for (int i = 0; i < this.parameters.size(); i++) {
-      paramArray[i] = this.parameters.get(i).toActionString();
-    }
-
-    return StringUtils.join(paramArray, ",");
   }
 }

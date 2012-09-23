@@ -12,7 +12,6 @@ import intradoc.data.DataResultSet;
 import intradoc.server.Service;
 
 import java.util.List;
-import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +29,6 @@ public class TestParameterMarshaller {
   ParameterMarshaller pbEmpty;
   ParameterMarshaller pbUsingMethodNoParams;
   ParameterMarshaller pbUsingMethodWithParams;
-  ParameterMarshaller pbUsingParamList;
 
   Class<?> methodParams[][] = new Class<?>[][] { {}, // methodWithNoParameters
       { String.class, int.class, boolean.class, Boolean.class, DataResultSet.class }, // methodWithParameters
@@ -41,7 +39,7 @@ public class TestParameterMarshaller {
   };
 
   DataBinder testBinder;
-  
+
   @Mock
   private Service testService;
 
@@ -86,30 +84,6 @@ public class TestParameterMarshaller {
     testBinder.putLocal("d", "false");
     testBinder.addResultSet("testRs", new DataResultSet());
 
-    Vector<String> paramVector = new Vector<String>();
-
-    paramVector.add("java.lang.String");
-    paramVector.add("a");
-    paramVector.add("required");
-
-    paramVector.add("int");
-    paramVector.add("b");
-    paramVector.add("required");
-
-    paramVector.add("boolean");
-    paramVector.add("c");
-    paramVector.add("required");
-
-    paramVector.add("java.lang.Boolean");
-    paramVector.add("d");
-    paramVector.add("");
-
-    paramVector.add("intradoc.data.DataResultSet");
-    paramVector.add("testRs");
-    paramVector.add("required");
-
-    pbUsingParamList = new ParameterMarshaller(paramVector);
-
     when(testService.getBinder()).thenReturn(testBinder);
   }
 
@@ -151,25 +125,6 @@ public class TestParameterMarshaller {
     Class<?> types[] = pbUsingMethodWithParams.getTypeArray();
     Object params[] = pbUsingMethodWithParams.getValueArray(testService);
     List<IParameter> binderVars = pbUsingMethodWithParams.getParameters();
-
-    assertEquals(5, types.length);
-    assertEquals(5, params.length);
-    assertEquals(5, binderVars.size());
-
-    // class types
-    assertEquals(String.class, types[0]);
-    assertEquals(int.class, types[1]);
-    assertEquals(boolean.class, types[2]);
-    assertEquals(Boolean.class, types[3]);
-    assertEquals(DataResultSet.class, types[4]);
-  }
-
-  @Test
-  public void testParsingParameterStringEnumeratesCorrectParameterTypes() {
-
-    Class<?> types[] = pbUsingParamList.getTypeArray();
-    Object params[] = pbUsingParamList.getValueArray(testService);
-    List<IParameter> binderVars = pbUsingParamList.getParameters();
 
     assertEquals(5, types.length);
     assertEquals(5, params.length);

@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import net.balusc.util.ObjectConverter;
 
@@ -68,6 +70,9 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
 
     List<String> variableNames = new ArrayList<String>();
     List<Integer> variableReturnTypes = new ArrayList<Integer>();
+
+    // TODO: sort alphabetically on method name
+    SortedSet<Method> sortedMethods = new TreeSet<Method>();
 
     for (Method m : m_class.getDeclaredMethods()) {
       IdocFunction functionInfo = m.getAnnotation(IdocFunction.class);

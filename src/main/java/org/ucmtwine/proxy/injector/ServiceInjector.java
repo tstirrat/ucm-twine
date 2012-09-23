@@ -76,7 +76,7 @@ public class ServiceInjector extends BaseInjector implements FilterImplementor {
     String methodHashCode = MethodRegistry.addMethod(method);
 
     if (methodHashCode == null) {
-      throw new DataException("Cannot register method " + method.toString());
+      throw new DataException("Cannot register method " + method.toString() + " because it has a null hashCode");
     }
 
     try {
