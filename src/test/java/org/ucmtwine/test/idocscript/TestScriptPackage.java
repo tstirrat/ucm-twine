@@ -56,6 +56,11 @@ public class TestScriptPackage {
     return false;
   }
 
+  @IdocVariable
+  public boolean never() {
+    return false;
+  }
+
   @IdocFunction
   public long factorial(long input) {
     // If the integer is negative, we wish to return an error
@@ -157,5 +162,10 @@ public class TestScriptPackage {
     }
 
     return b;
+  }
+
+  @IdocFunction(name = "renamedFunc")
+  public int renamedFunction(String param1) {
+    return 0;
   }
 }

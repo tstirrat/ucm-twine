@@ -71,7 +71,6 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
     List<String> variableNames = new ArrayList<String>();
     List<Integer> variableReturnTypes = new ArrayList<Integer>();
 
-    // TODO: sort alphabetically on method name
     Method ms[] = m_class.getDeclaredMethods();
     Map<String, Method> methods = new TreeMap<String, Method>();
 
@@ -84,9 +83,11 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
       IdocFunction functionInfo = m.getAnnotation(IdocFunction.class);
 
       if (functionInfo != null) {
-        // TODO: add annotation .name() support where idoc method name differs
-        // from java method name
-        functionNames.add(m.getName());
+        if (functionInfo.name().equals("")) {
+          functionNames.add(m.getName());
+        } else {
+          functionNames.add(functionInfo.name());
+        }
         functionMethodNames.add(m.getName());
         functionParams.add(new ParameterMarshaller(m));
         functionReturnTypes.add(getFunctionReturnType(m));
@@ -96,7 +97,11 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
         IdocVariable varInfo = m.getAnnotation(IdocVariable.class);
 
         if (varInfo != null) {
-          variableNames.add(varInfo.name());
+          if (varInfo.name().equals("")) {
+            variableNames.add(m.getName());
+          } else {
+            variableNames.add(varInfo.name());
+          }
           variableMethodNames.add(m.getName());
           variableReturnTypes.add(getVariableReturnType(m));
           variableParameterTypes.add(m.getParameterTypes());
