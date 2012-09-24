@@ -5,8 +5,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Defines an Idoc script global variable.
+ * 
+ * @author tim
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface IdocVariable {
+  /**
+   * Variable name, if not the same as the method name.
+   */
   String name() default "";
 }

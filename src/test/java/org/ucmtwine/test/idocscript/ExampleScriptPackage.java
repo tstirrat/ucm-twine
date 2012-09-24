@@ -20,7 +20,7 @@ import org.ucmtwine.annotation.IdocVariable;
  * 
  * @author tim
  */
-public class TestScriptPackage {
+public class ExampleScriptPackage {
 
   @IdocVariable(name = "UppercaseUserName")
   public String uppercaseUserName(ExecutionContext context) throws ServiceException {

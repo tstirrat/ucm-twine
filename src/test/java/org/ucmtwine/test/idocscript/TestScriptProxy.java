@@ -14,7 +14,7 @@ public class TestScriptProxy {
 
   @Before
   public void setUp() {
-    scriptPackage = new ScriptProxy(TestScriptPackage.class);
+    scriptPackage = new ScriptProxy(ExampleScriptPackage.class);
   }
 
   @Test
