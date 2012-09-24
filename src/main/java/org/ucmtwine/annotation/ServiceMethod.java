@@ -18,32 +18,38 @@ import java.lang.annotation.Target;
 public @interface ServiceMethod {
 
   /**
-   * Read access level: User required read (R) access permissions (?).
+   * Read access level: User requires read (R) permissions on the security group
+   * referenced in the service.
    */
   int ACCESS_READ = 1;
 
   /**
-   * Write access level: User requires write (W) access permissions (?).
+   * Write access level: User requires write (W) permissions on the security
+   * group referenced in the service.
    */
   int ACCESS_WRITE = 2;
 
   /**
-   * Delete access level: User requires delete (D) access permissions (?).
+   * Delete access level: User requires delete (D) permissions on the security
+   * group referenced in the service.
    */
   int ACCESS_DELETE = 4;
 
   /**
-   * Admin access level: User requires admin (A) access permissions (?).
+   * Admin access level: User requires admin (A) permissions on the security
+   * group referenced in the service.
    */
   int ACCESS_ADMIN = 8;
 
   /**
-   * Global access level.
+   * Global access level: Used if the service does not act on documents. When
+   * global is used, it also requires at least one other RWDA permission, this
+   * checks the user has the specified permission on ANY security group.
    */
   int ACCESS_GLOBAL = 16;
 
   /**
-   * Scriptable access level: can be called inside scripts e.g. IDOC.
+   * Scriptable access level: The service can be called inside idoc scripts.
    */
   int ACCESS_SCRIPTABLE = 32;
 
@@ -68,9 +74,9 @@ public @interface ServiceMethod {
   String type() default "";
 
   /**
-   * The access level of the service.
+   * The access level of the service. Defaults to Global, Scriptable, Read
    */
-  int accessLevel() default ACCESS_GLOBAL | ACCESS_SCRIPTABLE;
+  int accessLevel() default ACCESS_READ | ACCESS_GLOBAL | ACCESS_SCRIPTABLE;
 
   /**
    * The notified subjects.
