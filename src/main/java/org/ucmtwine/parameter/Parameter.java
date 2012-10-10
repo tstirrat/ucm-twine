@@ -3,6 +3,7 @@ package org.ucmtwine.parameter;
 import intradoc.data.DataBinder;
 import intradoc.data.DataResultSet;
 import intradoc.data.ResultSet;
+import intradoc.provider.Provider;
 import intradoc.server.Service;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ import org.ucmtwine.parameter.types.FloatParameter;
 import org.ucmtwine.parameter.types.InjectedParameter;
 import org.ucmtwine.parameter.types.IntegerParameter;
 import org.ucmtwine.parameter.types.LongParameter;
+import org.ucmtwine.parameter.types.ProviderParameter;
 import org.ucmtwine.parameter.types.ResultSetParameter;
 import org.ucmtwine.parameter.types.StringParameter;
 
@@ -58,6 +60,7 @@ public abstract class Parameter implements IParameter {
 
   /**
    * Shortcut to make a named String parameter.
+   * 
    * @param name
    * @return
    */
@@ -119,6 +122,8 @@ public abstract class Parameter implements IParameter {
     } else if (type == Boolean.class || type == boolean.class) {
       p = new BooleanParameter(name, type);
 
+    } else if (type == Provider.class) {
+      p = new ProviderParameter(name);
     } else {
       throw new IllegalArgumentException("Parameter type " + type.getName() + " is not valid");
     }
