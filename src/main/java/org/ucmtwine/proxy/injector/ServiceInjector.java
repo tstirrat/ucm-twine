@@ -80,8 +80,7 @@ public class ServiceInjector extends BaseInjector implements FilterImplementor {
     }
 
     try {
-      serviceData.addAction(Action.CODE_TYPE, "delegateWithParameters", methodHashCode, controlFlags,
-          "Error executing delegateWithParameters()");
+      serviceData.addAction(Action.CODE_TYPE, "delegateWithParameters", methodHashCode, controlFlags, "");
 
     } catch (DataException e) {
       throw new DataException("Cannot add defaut action to service" + serviceName + " - " + e.getMessage());

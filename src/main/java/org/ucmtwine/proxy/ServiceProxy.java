@@ -34,11 +34,11 @@ public class ServiceProxy extends Service {
 
     } catch (IllegalArgumentException e) {
 
-      throw new DataException(e.getMessage(), e);
+      throw new DataException(e.getMessage());
 
     } catch (Exception e) {
 
-      throw new ServiceException(e.getMessage(), e);
+      throw new ServiceException(e);
     }
   }
 }
