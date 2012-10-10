@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ucmtwine.annotation.Binder;
+import org.ucmtwine.annotation.Environment;
 import org.ucmtwine.parameter.types.InjectedParameter;
 
 /**
@@ -67,16 +68,22 @@ public class ParameterMarshaller {
       // defaults
       boolean paramRequired = true;
       String paramName = "";
-      Class<?> paramType = paramTypes[i];
-
+      Class<?> paramClass = paramTypes[i];
+      
       for (Annotation a : methodAnnotations[i]) {
         if (a instanceof Binder) {
           paramName = ((Binder) a).name();
           paramRequired = ((Binder) a).required();
+          break;
         }
+//        else if (a instanceof Environment) {
+//          paramName = ((Environment) a).name();
+//          paramRequired = ((Environment) a).required();
+//          break;
+//        }
       }
 
-      parameters.add(Parameter.create(paramName, paramType, paramRequired));
+      parameters.add(Parameter.create(paramName, paramClass, paramRequired));
     }
 
     return parameters;
