@@ -39,16 +39,22 @@
     <span class="k">return</span> <span class="n">input</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
   <span class="o">}</span>
 
-  <span class="c1">// &lt;$ strLength("Hello") $&gt; = 5</span>
+  <span class="c1">// usage: &lt;!--$ strLength("Hello") --&gt;</span>
+  <span class="c1">// result: 5</span>
 <span class="o">}</span>
 </pre></div>
+
+<p>Stop writing all that same parameter checking code:</p>
 
 <div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServicePackage</span> <span class="o">{</span>
 
   <span class="nd">@ServiceMethod</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"EXAMPLE_SERVICE"</span><span class="o">)</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">(</span><span class="nd">@Binder</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"name"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">SystemUtils</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"system"</span><span class="o">,</span> <span class="s">"Hello "</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">"!"</span><span class="o">);</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">(</span><span class="nd">@Binder</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"date"</span><span class="o">)</span> <span class="n">Date</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// do something with date</span>
   <span class="o">}</span>
+
+  <span class="c1">// usage: ?IdcService=EXAMPLE_SERVICE&amp;d=Hello</span>
+  <span class="c1">// result: Error: Parameter 'date' must be parseable as a date</span>
 <span class="o">}</span>
 </pre></div>
       </section>
