@@ -34,6 +34,8 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
 
   private Class<?> m_class;
 
+  private Method functionMethods[];
+
   public static final int RETURN_VOID = -1;
   public static final int RETURN_STRING = 0;
   public static final int RETURN_BOOLEAN = 1;
@@ -72,11 +74,16 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
     List<Integer> variableReturnTypes = new ArrayList<Integer>();
 
     Method ms[] = m_class.getDeclaredMethods();
+
+    functionMethods = new Method[ms.length];
+
     Map<String, Method> methods = new TreeMap<String, Method>();
 
     for (Method m : ms) {
       methods.put(m.getName(), m);
     }
+
+    int functionCounter = 0;
 
     for (String methodName : methods.keySet()) {
       Method m = methods.get(methodName);
@@ -89,9 +96,11 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
           functionNames.add(functionInfo.name());
         }
         functionMethodNames.add(m.getName());
+        functionMethods[functionCounter] = m;
         functionParams.add(new ParameterMarshaller(m));
         functionReturnTypes.add(getFunctionReturnType(m));
         functionParameterTypes.add(m.getParameterTypes());
+        functionCounter++;
 
       } else {
         IdocVariable varInfo = m.getAnnotation(IdocVariable.class);
@@ -291,8 +300,7 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
   public Object runFunctionMethod(int functionIndex, Object[] args, ExecutionContext ctx) throws SecurityException,
       NoSuchMethodException, IllegalArgumentException, ServiceException, IllegalAccessException,
       InvocationTargetException {
-    Method method = m_class
-        .getMethod(functionMethodNames.get(functionIndex), functionParameterTypes.get(functionIndex));
+    Method method = functionMethods[functionIndex];
 
     Object params[] = getInjectedValueArray(method, args, ctx);
 
