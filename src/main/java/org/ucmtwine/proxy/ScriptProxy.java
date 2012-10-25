@@ -314,22 +314,38 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
     }
 
     if (result == null) {
-      result = "";
+      return result;
     }
 
-    if (boolean.class.isInstance(result) || Boolean.class.isInstance(result)) {
+    return convertReturnValue(result);
+  }
+
+  /**
+   * Convert the method return value into a PageMerger internal type of String,
+   * Long or Double
+   * 
+   * @param result
+   * @return
+   */
+  private Object convertReturnValue(Object result) {
+    if (boolean.class.isInstance(result) || result instanceof Boolean) {
       return ScriptExtensionUtils.computeReturnObject(1, ((Boolean) result).booleanValue(), 0, 0.0, null);
 
-    } else if (Integer.class.isInstance(result) || int.class.isInstance(result) || long.class.isInstance(result)) {
+    } else if (long.class.isInstance(result)) {
       return (Long) result;
+
+    } else if (int.class.isInstance(result) || result instanceof Integer) {
+      return new Long((Integer) result);
 
     } else if (double.class.isInstance(result)) {
       return (Double) result;
+
+    } else if (float.class.isInstance(result) || result instanceof Float) {
+      return new Double((Float) result);
     }
 
-    // String
+    // String/Double/Long
     return result;
-
   }
 
   /**

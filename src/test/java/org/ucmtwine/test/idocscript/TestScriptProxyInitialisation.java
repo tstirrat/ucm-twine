@@ -8,13 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ucmtwine.parameter.Parameter;
 import org.ucmtwine.proxy.ScriptProxy;
+import org.ucmtwine.test.idocscript.classes.HowToComponentsPackage;
 
-public class TestScriptProxy {
+public class TestScriptProxyInitialisation {
   ScriptExtensions scriptPackage;
 
   @Before
   public void setUp() {
-    scriptPackage = new ScriptProxy(ExampleScriptPackage.class);
+    scriptPackage = new ScriptProxy(HowToComponentsPackage.class);
   }
 
   @Test

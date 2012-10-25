@@ -1,4 +1,4 @@
-package org.ucmtwine.test.idocscript;
+package org.ucmtwine.test.idocscript.classes;
 
 import intradoc.common.ExecutionContext;
 import intradoc.common.LocaleUtils;
@@ -20,7 +20,7 @@ import org.ucmtwine.annotation.IdocVariable;
  * 
  * @author tim
  */
-public class ExampleScriptPackage {
+public class HowToComponentsPackage {
 
   @IdocVariable(name = "UppercaseUserName")
   public String uppercaseUserName(ExecutionContext context) throws ServiceException {
