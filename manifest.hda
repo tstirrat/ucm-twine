@@ -12,7 +12,7 @@ location
 component
 TwineLib/TwineLib.hda
 componentExtra
-TwineLib/readme.txt
+TwineLib/readme.md
 componentLib
 TwineLib/lib/
 @end
