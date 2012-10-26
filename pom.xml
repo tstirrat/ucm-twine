@@ -144,7 +144,7 @@
 				<dependency>
 					<groupId>com.oracle.ucm</groupId>
 					<artifactId>ucm</artifactId>
-					<version>11.1.1.6.0</version>
+					<version>[11.1,12.0)</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -173,7 +173,7 @@
 				<dependency>
 					<groupId>com.oracle.ucm</groupId>
 					<artifactId>ucm</artifactId>
-					<version>10.1.3.5-105</version>
+					<version>[10.1,11.0)</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
