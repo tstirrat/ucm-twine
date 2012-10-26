@@ -1,1 +1,3 @@
+before_install: .travis_deps.sh
 language: java
+secure: "BrCDsZ+QlLbpEHBxUqA2a4SsAzKdEjsl2NC8SYQF4lwBhd98oO6nPxgfqM3a\np1VS93DcZ3OXTC9Y05t0euDndsXTfvvZQgqIZvbD+Irs49sTs0inWY449of1\nGw6IIhQtBLvhL4MeXBQQ/nyoX/ZV1rdzTlaCj4AZICzTI/89XL8="
