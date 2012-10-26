@@ -1,6 +1,6 @@
 Twine for Oracle WebCenter Content/UCM (Beta)
 =============================================
-[![Build Status](https://travis-ci.org/tstirrat/ucm-twine.png)](https://travis-ci.org/tstirrat/ucm-twine])
+[![Build Status](https://travis-ci.org/tstirrat/ucm-twine.png)](https://travis-ci.org/tstirrat/ucm-twine)
 
 An annotation based Java framework for Oracle UCM.
 
