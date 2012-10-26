@@ -21,19 +21,25 @@ public abstract class BaseInjector implements IClassInjector {
     // find mapped service classes in service.properties
     Properties properties = new Properties();
 
-    InputStream inputStream = null;
+    InputStream is = null;
     try {
-      inputStream = propertiesFile.openStream();
+      is = propertiesFile.openStream();
 
-      if (inputStream != null) {
-        try {
-          properties.load(inputStream);
-        } catch (IOException ioe) {
-          Log.warn(ioe.getMessage());
-        }
+      if (is != null) {
+        properties.load(is);
       }
+
     } catch (IOException e) {
       Log.warn(e.getMessage());
+
+    } finally {
+      if (is != null) {
+        try {
+          is.close();
+        } catch (IOException ignore) {
+
+        }
+      }
     }
 
     List<Class<?>> classes = new ArrayList<Class<?>>();
