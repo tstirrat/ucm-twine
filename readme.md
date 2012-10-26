@@ -1,5 +1,6 @@
 Twine for Oracle WebCenter Content/UCM (Beta)
 =============================================
+[![Build Status](https://travis-ci.org/tstirrat/ucm-twine.png)](https://travis-ci.org/tstirrat/ucm-twine])
 
 An annotation based Java framework for Oracle UCM.
 
@@ -176,36 +177,20 @@ Including the Twine jar in your own component
     ```
 
 2. Create a UCM component: MyComponent
-3. Include twine in your MyComponent.hda classpath:
+3. Include your component jar in the MyComponent.hda classpath:
 
     ```
-    classpath=$COMPONENT_DIR/lib/mycomponent.jar;$COMPONENT_DIR/lib/ucm-twine-0.9.0.jar;
+    classpath=$COMPONENT_DIR/lib/MyComponent-1.0-SNAPSHOT.jar;
     ```
 
-4. Include a .properties file in your jar to define your services and script extension classes. If you use maven and place the file in `src/main/resources` it will be at the root of your jar.
+4. Include a twine.properties file in your jar to define your services and script extension classes. If you use maven and place the file in `src/main/resources` it will be at the root of your jar.
 
     ```
-    # <jar root>/mycomponent.properties
+    # <jar root>/twine.properties
     ucm.service.ExampleServicePackage=org.component.example.ExampleServicePackage
     ```
 
-5. Add Twine's Bootstrapper to the **Filters** resultset of your MyComponent.hda file, using the .properties file as the filter's parameter. If the .properties file is not at the root of your jar you may need to add relative path information here.
-
-    ```
-    @ResultSet Filters
-    4
-    type
-    location
-    parameter
-    loadOrder
-    extraAfterConfigInit
-    org.ucmtwine.Bootstrapper
-    mycomponent.properties
-    1000
-    @end
-    ```
-
-6. Create your class and annotate a method:
+5. Create your class and annotate a method:
 
     ```java
     package org.component.example;
@@ -219,14 +204,16 @@ Including the Twine jar in your own component
     }
     ```
 
-7. Build mycomponent.jar
+6. Build the component's jar e.g. MyComponent-1.0-SNAPSHOT.jar
+7. Enable the component
+8. Restart your server
 
-From here you can edit your .properties file each time you add a new class. However, if you are adding a new method to an existing class, there is no more setup needed.
+From here you can edit your twine.properties file each time you add a new class. However, if you are adding a new method to an existing class, there is no more setup needed.
 
 Properties file syntax
 ----------------------
 
-The .properties file should declare each class that you wish to load with the appropriate key.
+The twine.properties file should declare each class that you wish to load with the appropriate key.
 
 Filters: `ucm.filter.uniqueKey1=fully.qualified.class.Name`
 
