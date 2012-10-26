@@ -5,17 +5,18 @@ import intradoc.common.ScriptContext;
 import intradoc.common.ScriptExtensions;
 import intradoc.common.ServiceException;
 import intradoc.data.DataException;
-import intradoc.shared.FilterImplementor;
+
+import java.net.URL;
 
 import org.ucmtwine.proxy.ScriptProxy;
 
-public class IdocScriptInjector extends BaseInjector implements IClassInjector, FilterImplementor {
+public class IdocScriptInjector extends BaseInjector implements IClassInjector {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void injectClasses(String propertiesFile) {
+  public void injectClasses(URL propertiesFile) {
     injectClasses(propertiesFile, "ucm.idocscript");
   }
 

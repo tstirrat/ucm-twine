@@ -3,6 +3,7 @@ package org.ucmtwine.proxy.injector;
 import intradoc.common.ServiceException;
 import intradoc.data.DataException;
 
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface IClassInjector {
    *          The prefix to look for when enumerating classes
    * @return The list of checked classes
    */
-  List<Class<?>> enumerateClasses(String propertiesFile, String prefix);
+  List<Class<?>> enumerateClasses(URL propertiesFile, String prefix);
 
   /**
    * Inject classes which are defined in a properties file.
@@ -29,7 +30,7 @@ public interface IClassInjector {
    * @param propertiesFile
    *          The relative path and name of a properties file
    */
-  void injectClasses(String propertiesFile);
+  void injectClasses(URL propertiesFile);
 
   /**
    * Inject classes which are defined in a properties file with a given prefix.
@@ -39,7 +40,7 @@ public interface IClassInjector {
    * @param prefix
    *          The prefix to look for when enumerating classes
    */
-  void injectClasses(String propertiesFile, String prefix);
+  void injectClasses(URL propertiesFile, String prefix);
 
   /**
    * Inject the enumerated classes via the subclass implemented method.

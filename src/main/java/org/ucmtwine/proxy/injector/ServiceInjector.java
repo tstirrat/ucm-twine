@@ -4,20 +4,20 @@ import intradoc.data.DataException;
 import intradoc.server.Action;
 import intradoc.server.ServiceData;
 import intradoc.server.ServiceManager;
-import intradoc.shared.FilterImplementor;
 
 import java.lang.reflect.Method;
+import java.net.URL;
 
 import org.ucmtwine.annotation.ServiceMethod;
 import org.ucmtwine.proxy.ServiceProxy;
 
-public class ServiceInjector extends BaseInjector implements FilterImplementor {
+public class ServiceInjector extends BaseInjector {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void injectClasses(String propertiesFile) {
+  public void injectClasses(URL propertiesFile) {
     injectClasses(propertiesFile, "ucm.service");
   }
 

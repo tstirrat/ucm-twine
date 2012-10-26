@@ -5,6 +5,7 @@ import intradoc.shared.PluginFilterData;
 import intradoc.shared.PluginFilters;
 
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Vector;
 
 import org.ucmtwine.annotation.Filter;
@@ -22,7 +23,7 @@ public class FilterInjector extends BaseInjector implements IClassInjector {
    * {@inheritDoc}
    */
   @Override
-  public void injectClasses(String propertiesFile) {
+  public void injectClasses(URL propertiesFile) {
     injectClasses(propertiesFile, "ucm.filter");
   }
 
