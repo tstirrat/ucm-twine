@@ -112,14 +112,14 @@ public class TestScriptProxyReturnTypes {
   }
 
   @Test
-  public void testFloatPrimitiveReturnType_ShouldYieldADoubleResult() throws Exception {
+  public void testFloatPrimitiveReturnType_ShouldYieldAFloatResult() throws Exception {
     ScriptInfo info = getScriptInfo("returnFloatPrimitive");
 
     Object args[] = new Object[1];
     proxy.evaluateFunction(info, args, ctx);
 
-    assertEquals(Double.class, args[0].getClass());
-    assertEquals(new Double(0.1d).floatValue(), ((Double) args[0]).floatValue(), DOUBLE_COMPARISON_DELTA);
+    assertEquals(Float.class, args[0].getClass());
+    assertEquals(0.1f, ((Float) args[0]), DOUBLE_COMPARISON_DELTA);
   }
 
   @Test
@@ -129,8 +129,8 @@ public class TestScriptProxyReturnTypes {
     Object args[] = new Object[1];
     proxy.evaluateFunction(info, args, ctx);
 
-    assertEquals(Double.class, args[0].getClass());
-    assertEquals(new Double(0.1d).floatValue(), ((Double) args[0]).floatValue(), DOUBLE_COMPARISON_DELTA);
+    assertEquals(Float.class, args[0].getClass());
+    assertEquals(0.1f, (Float) args[0], DOUBLE_COMPARISON_DELTA);
   }
 
   @Test

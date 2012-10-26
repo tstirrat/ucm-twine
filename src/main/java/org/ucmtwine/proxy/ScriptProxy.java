@@ -340,11 +340,9 @@ public class ScriptProxy extends ScriptExtensionsAdaptor {
     } else if (double.class.isInstance(result)) {
       return (Double) result;
 
-    } else if (float.class.isInstance(result) || result instanceof Float) {
-      return new Double((Float) result);
     }
 
-    // String/Double/Long
+    // String/Double/Long/Float
     return result;
   }
 
