@@ -4,7 +4,10 @@ Twine for Oracle WebCenter Content/UCM (Beta)
 
 An annotation based Java framework for Oracle UCM.
 
-It allows you to write UCM services, Idoc script extensions and filters using Java [POJO](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Object")s. It handles binder value checking so you never need to write that same glue code again.
+- Write UCM services, Idoc script extensions and filters using Java [POJO](http://en.wikipedia.org/wiki/Plain_Old_Java_Object "Plain Old Java Object")s. 
+- Binder value validation and conversion e.g ask for a Date or ResultSet instead of doing the work manually each time
+- Dependency injection of Service context members (PageMerger, HttpImplementor) making your code easy to unit test
+- Classes are registered once in a single properties file, instead of having to edit the old HTML tables to add each service
 
 Why Twine?
 ----------
