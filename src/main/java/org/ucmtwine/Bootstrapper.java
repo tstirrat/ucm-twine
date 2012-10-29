@@ -6,11 +6,19 @@ import intradoc.common.SystemUtils;
 import intradoc.data.DataBinder;
 import intradoc.data.DataException;
 import intradoc.data.Workspace;
+import intradoc.io.zip.IdcZipFile;
 import intradoc.shared.FilterImplementor;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.ucmtwine.proxy.injector.FilterInjector;
 import org.ucmtwine.proxy.injector.IClassInjector;
@@ -29,6 +37,11 @@ public class Bootstrapper implements FilterImplementor {
     try {
       ClassLoader cl = getClass().getClassLoader();
       Enumeration<URL> propFiles = cl.getResources(configFileName);
+
+      if (!propFiles.hasMoreElements()) {
+        // 11g
+        propFiles = getResourcesExt(cl, configFileName);
+      }
 
       while (propFiles.hasMoreElements()) {
         URL propFile = propFiles.nextElement();
@@ -53,5 +66,59 @@ public class Bootstrapper implements FilterImplementor {
     }
 
     return CONTINUE;
+  }
+
+  /**
+   * Replacement for getResources which works on 11g
+   * 
+   * @param classLoader
+   * @param configFileName
+   * @throws MalformedURLException
+   */
+  private Enumeration<URL> getResourcesExt(ClassLoader classLoader, String configFileName) {
+    List<URL> newProps = new ArrayList<URL>();
+    if (classLoader.getClass().getSimpleName().equalsIgnoreCase("IdcClassLoader")) {
+      try {
+        Field f = classLoader.getClass().getField("m_zipfiles");
+        try {
+          @SuppressWarnings("unchecked")
+          Map<String, IdcZipFile> zipFiles = (Map<String, IdcZipFile>) f.get(classLoader);
+
+          for (Entry<String, IdcZipFile> entry : zipFiles.entrySet()) {
+            if (entry.getValue().m_entries.get(configFileName) != null) {
+              String jarFile = entry.getKey();
+
+              // windows needs a slash before the C:/
+              if (!jarFile.startsWith("/")) {
+                jarFile = "/" + jarFile;
+              }
+
+              try {
+                URL u = new URL("jar:file:" + entry.getKey() + "!/" + configFileName);
+                newProps.add(u);
+
+              } catch (MalformedURLException e) {
+                e.printStackTrace();
+              }
+
+            }
+          }
+        } catch (IllegalArgumentException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (IllegalAccessException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+
+      } catch (SecurityException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (NoSuchFieldException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    return Collections.enumeration(newProps);
   }
 }
