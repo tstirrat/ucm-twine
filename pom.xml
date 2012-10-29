@@ -12,7 +12,7 @@
 	</parent>
 	<name>UCM Twine Library</name>
 	<description>Dependency injection framework for Oracle WebCenter Content (UCM)</description>
-	<url>https://github.com/tstirrat/ucm-twine</url>
+	<url>http://ucmtwine.org</url>
 	<licenses>
 		<license>
 			<name>MIT</name>
