@@ -28,23 +28,32 @@
         </ul>
       </header>
       <section>
-        <h2>Why Twine?</h2>
+        <h2>Version 0.9.1 Released</h2>
 
-<p>Write UCM services, Idoc script extensions and filters using <a href="http://en.wikipedia.org/wiki/Plain_Old_Java_Object" title="Plain Old Java Object">POJO</a>s.</p>
+<ul>
+<li>No need to wire up the Bootstrapper anymore, now Twine reads <code>twine.properties</code> inside component jars</li>
+<li>Fixed a ClassCastException when specifying an <em>int</em> return type in Idoc functions</li>
+<li>Cleaner handling of <em>Float</em>, <em>null</em> and <em>void</em> return types from Idoc functions</li>
+</ul><h2>Why Twine?</h2>
+
+<ul>
+<li>Write UCM services, Idoc script extensions and filters using plain Java objects and annotations</li>
+<li>Dependency injection reduces coupling, promotes cleaner methods and allows unit testing</li>
+<li>Stop writing that same old boilerplate validation code. Ask for a Date or ResultSet and Twine will parse and validate it for you</li>
+</ul><h2>Examples</h2>
 
 <div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleScriptPackage</span> <span class="o">{</span>
 
   <span class="nd">@IdocFunction</span>
-  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">strLength</span><span class="o">(</span><span class="n">String</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">input</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">greet</span><span class="o">(</span><span class="n">String</span> <span class="n">message</span><span class="o">,</span> <span class="n">UserData</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">message</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"dFullName"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"!"</span><span class="o">;</span>
   <span class="o">}</span>
-
-  <span class="c1">// usage: &lt;!--$ strLength("Hello") --&gt;</span>
-  <span class="c1">// result: 5</span>
 <span class="o">}</span>
+<span class="c1">// usage: &lt;!--$ greet("Hello") --&gt;</span>
+<span class="c1">// result: Hello Tim Stirrat!</span>
 </pre></div>
 
-<p>Stop writing all that same parameter checking code:</p>
+<p>Stop writing that same old parameter checking code:</p>
 
 <div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServicePackage</span> <span class="o">{</span>
 
@@ -52,11 +61,14 @@
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">(</span><span class="nd">@Binder</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"date"</span><span class="o">)</span> <span class="n">Date</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
     <span class="c1">// do something with date</span>
   <span class="o">}</span>
-
-  <span class="c1">// usage: ?IdcService=EXAMPLE_SERVICE&amp;date=Hello</span>
-  <span class="c1">// result: Error: Parameter 'date' must be parseable as a date</span>
 <span class="o">}</span>
+<span class="c1">// usage: ?IdcService=EXAMPLE_SERVICE&amp;date=Hello</span>
+<span class="c1">// result: Error: Parameter 'date' must be parseable as a date</span>
 </pre></div>
+
+<h2>Getting Started</h2>
+
+<p>See how to <a href="https://github.com/tstirrat/ucm-twine/wiki/Creating-a-Twine-component">create your first component</a> on the <a href="https://github.com/tstirrat/ucm-twine/wiki">wiki</a>.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/tstirrat">tstirrat</a></p>
