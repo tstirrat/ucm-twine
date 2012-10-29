@@ -38,9 +38,9 @@ public class Bootstrapper implements FilterImplementor {
       ClassLoader cl = getClass().getClassLoader();
       Enumeration<URL> propFiles = cl.getResources(configFileName);
 
+      // There should be at least one entry (TwineLib contains an example file)
       if (!propFiles.hasMoreElements()) {
-        // 11g
-        propFiles = getResourcesExt(cl, configFileName);
+        propFiles = getResources11g(cl, configFileName);
       }
 
       while (propFiles.hasMoreElements()) {
@@ -69,53 +69,55 @@ public class Bootstrapper implements FilterImplementor {
   }
 
   /**
-   * Replacement for getResources which works on 11g
+   * Replacement for getResources which works on 11g.
+   * 
+   * <p>
+   * The UCM 11G {@link ClassLoader} does not load component jars in the
+   * standard manner, which means you cannot use
+   * {@link ClassLoader#getResources(String)} to find all instances of a
+   * specific file in the jar path, instead we inspect the m_zipfiles map, where
+   * we can query each zip file for the properties file.
+   * </p>
+   * 
+   * <p>
+   * Instead, we use reflection to find all the loaded component jar files and
+   * search manually
+   * </p>
    * 
    * @param classLoader
    * @param configFileName
    * @throws MalformedURLException
    */
-  private Enumeration<URL> getResourcesExt(ClassLoader classLoader, String configFileName) {
+  private Enumeration<URL> getResources11g(ClassLoader classLoader, String configFileName) {
     List<URL> newProps = new ArrayList<URL>();
     if (classLoader.getClass().getSimpleName().equalsIgnoreCase("IdcClassLoader")) {
       try {
-        Field f = classLoader.getClass().getField("m_zipfiles");
-        try {
-          @SuppressWarnings("unchecked")
-          Map<String, IdcZipFile> zipFiles = (Map<String, IdcZipFile>) f.get(classLoader);
+        Field field = classLoader.getClass().getField("m_zipfiles");
 
-          for (Entry<String, IdcZipFile> entry : zipFiles.entrySet()) {
-            if (entry.getValue().m_entries.get(configFileName) != null) {
-              String jarFile = entry.getKey();
+        @SuppressWarnings("unchecked")
+        Map<String, IdcZipFile> zipFiles = (Map<String, IdcZipFile>) field.get(classLoader);
 
-              // windows needs a slash before the C:/
-              if (!jarFile.startsWith("/")) {
-                jarFile = "/" + jarFile;
-              }
+        for (Entry<String, IdcZipFile> entry : zipFiles.entrySet()) {
+          if (entry.getValue().m_entries.get(configFileName) != null) {
+            String jarFile = entry.getKey();
 
-              try {
-                URL u = new URL("jar:file:" + entry.getKey() + "!/" + configFileName);
-                newProps.add(u);
+            // windows needs a slash before the C:/
+            if (!jarFile.startsWith("/")) {
+              jarFile = "/" + jarFile;
+            }
 
-              } catch (MalformedURLException e) {
-                e.printStackTrace();
-              }
+            try {
+              URL u = new URL("jar:file:" + entry.getKey() + "!/" + configFileName);
+              newProps.add(u);
 
+            } catch (MalformedURLException e) {
+              e.printStackTrace();
             }
           }
-        } catch (IllegalArgumentException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } catch (IllegalAccessException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
         }
 
-      } catch (SecurityException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (NoSuchFieldException e) {
-        // TODO Auto-generated catch block
+      } catch (Exception e) {
+        // If there is any exception the ClassLoader is an unrecognised format
         e.printStackTrace();
       }
     }

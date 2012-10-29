@@ -1,14 +1,14 @@
-﻿<?hda version="11gR1-11.1.1.6.0-idcprod1-111219T111403" jcharset="UTF8" encoding="utf-8"?>
+<?hda version="11gR1-11.1.1.6.0-idcprod1-111219T111403" jcharset="UTF8" encoding="utf-8"?>
 @Properties LocalData
-ComponentName=TwineLib
-blDateFormat=dd/MM/yyyy {H:mm[:ss] [zzz]}!tAustralia/Sydney
 blFieldTypes=
 classpath=$COMPONENT_DIR/lib/ucm-twine-0.9.1-SNAPSHOT.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;
-componentTags=twine
 featureExtensions=Twine:0.9.1
-hasPreferenceData=0
+blDateFormat=dd/MM/yyyy {H:mm[:ss] [zzz]}!tAustralia/Sydney
 preventAdditionalComponentDowngrade=0
+componentTags=twine
 version=0.9.1-SNAPSHOT
+ComponentName=TwineLib
+hasPreferenceData=0
 @end
 @ResultSet ResourceDefinition
 4
@@ -16,6 +16,10 @@ type
 filename
 tables
 loadOrder
+resource
+resources/twinelib_tables.htm
+null
+10
 @end
 @ResultSet Filters
 4
@@ -34,6 +38,10 @@ fromTable
 toTable
 column
 loadOrder
+TwineLib_TracingSections
+IdcTracingSections
+itsSection
+10
 @end
 @ResultSet ClassAliases
 3
@@ -41,3 +49,4 @@ classname
 location
 loadOrder
 @end
+
