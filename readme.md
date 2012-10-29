@@ -9,6 +9,12 @@ An annotation based Java framework for Oracle UCM.
 - Dependency injection of Service context members (PageMerger, HttpImplementor) making your code easy to unit test
 - Classes are registered once in a single properties file, instead of having to edit the old HTML tables to add each service
 
+Getting Started
+---------------
+
+View the guide on [creating a Twine component](https://github.com/tstirrat/ucm-twine/wiki/Creating-a-Twine-component) in the wiki.
+
+
 Why Twine?
 ----------
 
