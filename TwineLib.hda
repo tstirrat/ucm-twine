@@ -1,12 +1,12 @@
 <?hda version="11gR1-11.1.1.6.0-idcprod1-111219T111403" jcharset="UTF8" encoding="utf-8"?>
 @Properties LocalData
 blFieldTypes=
-classpath=$COMPONENT_DIR/lib/ucm-twine-0.9.1.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;
+classpath=$COMPONENT_DIR/lib/ucm-twine-0.9.2-SNAPSHOT.jar;$COMPONENT_DIR/lib/commons-lang-2.6.jar;
 featureExtensions=Twine:0.9.1
 blDateFormat=dd/MM/yyyy {H:mm[:ss] [zzz]}!tAustralia/Sydney
 preventAdditionalComponentDowngrade=0
 componentTags=twine
-version=0.9.1
+version=0.9.2-SNAPSHOT
 ComponentName=TwineLib
 hasPreferenceData=0
 @end
