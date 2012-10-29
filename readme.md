@@ -14,7 +14,7 @@ Why Twine?
 
 ### All in one place
 
-Twine puts all the information in the Java file where the functionality is, so you don't need to edit the .hda file just to add a new service or change the name of an Idoc function.
+Twine puts all the information in the Java file where the functionality is, so you don't need to edit .hda and .htm files just to add a service, filter or Idoc function
 
 ### Cleaner and more maintainable code
 
@@ -93,23 +93,36 @@ public class TestExampleServicePackage {
 
 ### Idoc functions are easy to write
 
-Idoc functions can be so much of a pain to write that most developers will find any other way to implement the functionality before resorting to a custom Idoc function. Twine makes Idoc functions so simple that it's about as complicated as writing the function in Java. In turn you'll write better Idoc script functions, and your template code will be a lot cleaner.
+Idoc functions can be so much of a pain to write that most developers will avoid creating them at all costs. Twine makes Idoc functions so simple that you'll prefer writing them in favour of large blocks of Idoc. 
 
 ```java
 public class ExampleScriptPackage {
 
     @IdocFunction
-    public int strLength(String str) {
+    public int strLength2(String str) {
         return str.length();
     }
 
-    // <$ strLength("bob") $> = 3
+    // <$ strLength2("bob") $> = 3
 }
+```
+
+You'll be able to test them, too.
+
+```java
+public class TestExampleScriptPackage {
+
+    @Test
+    public void testStrLength2 {
+    	assertEqual("Hello".length(), script.strLength2("Hello"));
+    }
+}
+
 ```
 
 Compare this to the effort required to create an Idoc function the old way (ommitted due to size) and you can see how much more productive Twine will make UCM customisations.
 
-Idoc script functions can also include injected objects and `@Binder` values which can be defined in any order and will not affect the basic function parameters:
+Idoc script functions can also include injected objects. These can be defined in any order and will not affect the basic function parameters:
 
 ```java
 public class ExampleScriptPackage {
@@ -120,18 +133,10 @@ public class ExampleScriptPackage {
     }
 
     // <$ specialFunction("bob", 3) $> = String was bob, long was 3
-
-    @IdocFunction
-    public String specialFunction(String str, UserData u, @Binder(name = "l") Long l) {
-        return "String was: " + str + ", binder value was " + l.toString();
-    }
-
-    // <$ l = 4 $>
-    // <$ specialFunction("bob") $> = String was bob, binder value was 4
 }
 ```
 
-Twine handles type conversion of the parameters and return types automatically so you can define the function as you see fit. _To prevent too much data conversion you should define your parameters as Double, Long or Date, because those are the types UCM uses internally._
+Twine handles type conversion of the parameters and return types automatically so you can define the function as you see fit.
 
 ### Multiple filters in one class
 
@@ -155,65 +160,10 @@ public class ExampleFilterPackage {
 }
 ```
 
-Quick Start
-================
+Reference
+=============
 
-Twine can be used as a library in your own component or - if you plan to have a few Twine based components installed - it can be used as a single shared component.
-
-Use as a shared TwineLib component
-----------------------------------
-
-1. Install the TwineLib component and enable it.
-1. Follow the next guide from step 4.
-
-Including the Twine jar in your own component
----------------------------------------------
-
-1. Grab the Twine jar from the downloads page or include it as a maven dependency:
-
-    ```xml
-    <dependency>
-        <groupId>org.ucmtwine</groupId>
-        <artifactId>ucm-twine</artifactId>
-        <version>0.9.0</version>
-    </dependency>
-    ```
-
-2. Create a UCM component: MyComponent
-3. Include your component jar in the MyComponent.hda classpath:
-
-    ```
-    classpath=$COMPONENT_DIR/lib/MyComponent-1.0-SNAPSHOT.jar;
-    ```
-
-4. Include a twine.properties file in your jar to define your services and script extension classes. If you use maven and place the file in `src/main/resources` it will be at the root of your jar.
-
-    ```
-    # <jar root>/twine.properties
-    ucm.service.ExampleServicePackage=org.component.example.ExampleServicePackage
-    ```
-
-5. Create your class and annotate a method:
-
-    ```java
-    package org.component.example;
-
-    public class ExampleServicePackage {
-
-        @ServiceMethod(name = "EXAMPLE_SERVICE")
-        public void exampleService(@Binder(name = "param1") String param1) {
-            SystemUtils.trace("system", "param1 was " + param1);
-        }
-    }
-    ```
-
-6. Build the component's jar e.g. MyComponent-1.0-SNAPSHOT.jar
-7. Enable the component
-8. Restart your server
-
-From here you can edit your twine.properties file each time you add a new class. However, if you are adding a new method to an existing class, there is no more setup needed.
-
-Properties file syntax
+Configuration file
 ----------------------
 
 The twine.properties file should declare each class that you wish to load with the appropriate key.
@@ -227,9 +177,6 @@ Idoc Script: `ucm.idocscript.uniqueKey3=fully.qualified.class.Name3`
 Make sure to define each key before the = sign with a different name so that each class is picked up.
 
 That's all you need! Now you can begin writing service, filter or Idoc script definitions into your classes.
-
-Reference
-=============
 
 Dependency injection types
 ---------------------------
@@ -246,6 +193,7 @@ The following types can be specified so far:
 - ServiceRequestImplementor
 - ExecutionContext
 - Service
+- Provider
 
 These will probably be implemented:
 
@@ -385,19 +333,6 @@ public class ExampleScriptPackage {
 }
 ```
 
-Idoc function parameters do not use a `@Binder` annotation, however you can use the annotation to extract from the binder.
-
-```java
-public class ExampleScriptPackage {
-
-    @IdocFunction
-    public String strHello(String value, @Binder(name = "dUser") String dUser) {
-        return value + " " + dUser + "!";
-    }
-
-    // In Idoc: <$ strHello("Hi") $> = Hi tstirrat!
-}
-```
 
 @Filter
 -------
